@@ -1,0 +1,13 @@
+---
+description: Escopo e restrições do repositório docs (FIAP X)
+alwaysApply: true
+---
+
+# Restrições do projeto (`docs`)
+
+- Escopo: documentação **transversal** do sistema FIAP X (requisitos, domínio, event storming, fluxos/estados, C4, catálogo de eventos, ADRs, limites de mídia).
+- Não é dono do código de domínio dos serviços, do Terraform da GCP, do compose e2e nem de collections Requestly de runtime.
+- Não inventar requisito fora do enunciado + decisões **já documentadas neste repo** (ou em outros repos da org); na dúvida, perguntar.
+- Não criar OpenAPI / `contratos-http` aqui — Swagger por serviço.
+- README e stubs **autocontidos no texto publicado**: sem menções/links a pastas fora do Git da org (a IA ainda pode usar esse material só como contexto de sessão).
+- Naming: proibida a string que combina o produto com “videos” em camel/kebab/snake; preferir `fiap-x`, `processamento`, `midia`, `frames`.

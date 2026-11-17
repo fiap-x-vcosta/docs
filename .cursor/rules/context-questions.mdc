@@ -1,0 +1,12 @@
+---
+description: Nunca assumir contexto; perguntar antes de decisões ambíguas
+alwaysApply: true
+---
+
+# Contexto e perguntas
+
+- Nunca assumir requisitos, escopo, domínio, contratos de evento/HTTP ou trade-offs quando estiverem ambíguos ou incompletos.
+- Antes de endurecer RF/RNF, catálogo de eventos, ADRs ou C4: explicitar a dúvida e perguntar.
+- Preferir 1–2 perguntas críticas por vez; propor opções concretas quando houver caminhos válidos distintos.
+- Canon **publicado** deste repo: [`README.md`](../../README.md) e demais pastas deste repositório (e docs/ADRs em outros repos da org, quando existirem).
+- Material fora da org (ex. notas locais do autor) **pode e deve** ser usado como contexto de trabalho pela IA; a restrição é só não citá-lo nos arquivos commitados (ver `org-only-canon`).
