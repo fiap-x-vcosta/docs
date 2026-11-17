@@ -1,5 +1,5 @@
 # Requisitos funcionais e não funcionais
 
-> **Status:** stub — preencher na Parte 2 (após event storming).
+> **Status:** stub — a preencher após o event storming.
 
-RF e RNF a partir do enunciado do hackathon e das decisões fechadas da org.
+RF e RNF a partir do enunciado do hackathon e das decisões fechadas documentadas neste repositório.

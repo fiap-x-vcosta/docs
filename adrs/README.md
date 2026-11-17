@@ -4,10 +4,10 @@ Decisões transversais aos microsserviços. ADRs de implementação local ficam 
 
 | ADR | Tema | Status |
 |-----|------|--------|
-| 001 | Storage multi-tier / `infra-storage` no demo-up/down | Planejado — Parte 7 |
-| 002 | Progresso de frames + Redis só no BFF (cache-aside) | Planejado — Parte 7 |
-| 003 | Outbox + inbox idempotente | Planejado — Parte 5/7 |
-| 004 | Worker API split + checkpoint/retomada (Postgres + frio) | Planejado — Parte 7 |
-| 005 | Provider de e-mail SendGrid | Planejado — Parte 7 |
+| 001 | Storage multi-tier / `infra-storage` no demo-up/down | Planejado |
+| 002 | Progresso de frames + Redis só no BFF (cache-aside) | Planejado |
+| 003 | Outbox + inbox idempotente | Planejado |
+| 004 | Worker API split + checkpoint/retomada (Postgres + frio) | Planejado |
+| 005 | Provider de e-mail SendGrid | Planejado |
 
-Arquivos `001-….md` … entram nas partes correspondentes (não inventar decisão aqui no skeleton). A numeração dos **ADRs** é sequencial de decisão; pastas temáticas do repo **não** usam prefixo numérico.
+Arquivos `001-….md` … são criados quando a decisão for escrita. A numeração dos **ADRs** é sequencial de decisão; pastas temáticas do repo **não** usam prefixo numérico.

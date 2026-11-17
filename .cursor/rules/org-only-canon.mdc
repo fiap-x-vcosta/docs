@@ -1,0 +1,12 @@
+---
+description: Canon só dentro da org — sem workspace local, planos ou checklists externos
+alwaysApply: true
+---
+
+# Canon apenas na org
+
+- Documentação e regras deste repositório devem ser **autocontidas** na org [`fiap-x-vcosta`](https://github.com/fiap-x-vcosta).
+- **Proibido** mencionar, linkar ou assumir caminhos de máquina local, pastas pessoais, `contexto.md`, `checklist.md`, `estimativa.md`, “workspace local”, “plano da IA”, “Parte N” de um roteiro externo, ou qualquer artefato que **não** exista como repositório/arquivo nesta org.
+- Quem clona só este repo (ou a org) precisa entender o conteúdo **sem** material fora do GitHub da org.
+- Referências válidas: outros repos da org (`docs`, serviços, `e2e`, infra, …), enunciado/decisões **já publicados neste repo**, e links públicos necessários (ex. docs de produto GCP).
+- Se uma decisão ainda só existir fora da org: **perguntar** ou escrever a decisão **aqui** — não apontar para arquivo externo.

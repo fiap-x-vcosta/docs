@@ -8,4 +8,4 @@ alwaysApply: true
 - Nunca assumir requisitos, escopo, domínio, contratos de evento/HTTP ou trade-offs quando estiverem ambíguos ou incompletos.
 - Antes de endurecer RF/RNF, catálogo de eventos, ADRs ou C4: explicitar a dúvida e perguntar.
 - Preferir 1–2 perguntas críticas por vez; propor opções concretas quando houver caminhos válidos distintos.
-- Canon deste repo: [`README.md`](../../README.md). Decisões de produto também vivem no workspace local (`contexto.md` / `checklist.md`) até serem promovidas para cá.
+- Canon deste repo: [`README.md`](../../README.md) e demais pastas deste repositório (e, se já existirem, docs/ADRs publicados em outros repos da org). Não usar material fora da org como fonte implícita.

@@ -7,7 +7,7 @@ alwaysApply: true
 
 - Escopo: documentação **transversal** do sistema FIAP X (requisitos, domínio, event storming, fluxos/estados, C4, catálogo de eventos, ADRs, limites de mídia).
 - Não é dono do código de domínio dos serviços, do Terraform da GCP, do compose e2e nem de collections Requestly de runtime.
-- Não inventar requisito fora do enunciado + decisões fechadas; na dúvida, perguntar.
+- Não inventar requisito fora do enunciado + decisões **já documentadas neste repo** (ou em outros repos da org); na dúvida, perguntar.
 - Não criar OpenAPI / `contratos-http` aqui — Swagger por serviço.
-- README autocontido: sem referências a pastas fora do Git nem a numeração de documentos pessoais.
+- README e stubs **autocontidos**: sem referências a pastas fora do Git da org, planos de trabalho externos ou numeração de roteiros pessoais.
 - Naming: proibida a string que combina o produto com “videos” em camel/kebab/snake; preferir `fiap-x`, `processamento`, `midia`, `frames`.

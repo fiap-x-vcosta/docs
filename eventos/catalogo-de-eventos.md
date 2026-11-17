@@ -1,5 +1,5 @@
 # Catálogo de eventos
 
-> **Status:** stub — Parte 5 (após storm e C4; fecha P6).
+> **Status:** stub — a preencher após event storming e C4.
 
 Envelope, tópicos (1 por evento de domínio + notificações conforme desenho), publicador, consumidores, payload, versão e idempotência.

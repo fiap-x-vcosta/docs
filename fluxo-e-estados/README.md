@@ -1,6 +1,6 @@
 # Fluxo e estados
 
-> **Status:** stub — Parte 3.
+> **Status:** stub — a preencher.
 
 - Caminho feliz (upload → processamento → listagem → download).
 - Caminho de erro com notificação por e-mail.
