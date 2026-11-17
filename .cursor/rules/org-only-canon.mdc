@@ -1,12 +1,12 @@
 ---
-description: Canon só dentro da org — sem workspace local, planos ou checklists externos
+description: Arquivos do repo autocontidos na org — contexto externo ok para a IA, sem menção no Git
 alwaysApply: true
 ---
 
-# Canon apenas na org
+# Conteúdo publicado só na org
 
-- Documentação e regras deste repositório devem ser **autocontidas** na org [`fiap-x-vcosta`](https://github.com/fiap-x-vcosta).
-- **Proibido** mencionar, linkar ou assumir caminhos de máquina local, pastas pessoais, `contexto.md`, `checklist.md`, `estimativa.md`, “workspace local”, “plano da IA”, “Parte N” de um roteiro externo, ou qualquer artefato que **não** exista como repositório/arquivo nesta org.
-- Quem clona só este repo (ou a org) precisa entender o conteúdo **sem** material fora do GitHub da org.
-- Referências válidas: outros repos da org (`docs`, serviços, `e2e`, infra, …), enunciado/decisões **já publicados neste repo**, e links públicos necessários (ex. docs de produto GCP).
-- Se uma decisão ainda só existir fora da org: **perguntar** ou escrever a decisão **aqui** — não apontar para arquivo externo.
+- Os **arquivos commitados** neste repositório devem ser **autocontidos** na org [`fiap-x-vcosta`](https://github.com/fiap-x-vcosta): quem clona só o GitHub da org entende o texto sem material externo.
+- A IA **pode e deve** usar como contexto de trabalho notas/planos/checklists fora da org quando estiverem disponíveis na sessão — isso **não** vai para o Git.
+- **Proibido nos arquivos do repo:** mencionar, linkar ou redirecionar o leitor para caminhos de máquina local, pastas pessoais, `contexto.md`, `checklist.md`, `estimativa.md`, “workspace local”, “plano da IA”, “Parte N” de roteiro externo, ou qualquer artefato que não exista nesta org.
+- Referências válidas **no texto publicado:** outros repos da org, decisões já escritas neste repo, e links públicos necessários (ex. docs de produto GCP).
+- Se uma decisão ainda só existir fora da org: usar esse material como contexto, **perguntar** se faltar clareza, e **escrever a decisão aqui** — sem apontar para o arquivo externo.

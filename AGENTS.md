@@ -7,7 +7,7 @@ Documentação transversal do sistema de processamento de vídeos **FIAP X**. Or
 1. Não inventar requisito fora do enunciado + decisões já publicadas **neste repo** (ou em outros repos da org).
 2. Se domínio, eventos ou ADRs estiverem ambíguos, **perguntar** antes de endurecer contrato.
 3. **Git:** nunca commit/push direto em `main`; abrir PR e **aguardar o humano mergear** (ver [`.cursor/rules/git-workflow.mdc`](.cursor/rules/git-workflow.mdc)).
-4. Conteúdo **autocontido na org** — sem referências a workspace local, planos externos ou arquivos que não existam no GitHub da org (ver [`.cursor/rules/org-only-canon.mdc`](.cursor/rules/org-only-canon.mdc)).
+4. Texto **publicado** autocontido na org — a IA pode usar notas fora da org como contexto, mas não deve mencioná-las nos arquivos do repo (ver [`.cursor/rules/org-only-canon.mdc`](.cursor/rules/org-only-canon.mdc)).
 5. Docs de um microsserviço (Swagger local, runbook do serviço) **não** moram aqui — só o que é transversal.
 6. Não criar catálogo OpenAPI / `contratos-http` neste repo (Swagger por serviço).
 7. Proibição de naming: não usar a string proibida que combina o produto com “videos” em camel/kebab/snake em artefato algum. Preferir `fiap-x`, `processamento`, `midia`, `frames`, etc.
