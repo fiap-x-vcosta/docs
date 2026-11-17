@@ -1,0 +1,11 @@
+---
+description: Layout do repositório de documentação transversal
+alwaysApply: true
+---
+
+# Layout (`docs`)
+
+- Na raiz: apenas `README.md`, `AGENTS.md`, `.gitignore` e `.cursor/`.
+- Conteúdo em pastas temáticas: `dominio/`, `requisitos/`, `event-storming/`, `fluxo-e-estados/`, `arquitetura/`, `eventos/`, `adrs/`.
+- Sem prefixos numéricos em pastas ou arquivos.
+- Sem código-fonte de microsserviço, Terraform GCP ou compose e2e neste repo.

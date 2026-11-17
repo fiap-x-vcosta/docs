@@ -6,5 +6,5 @@ Artefatos do workshop: linha do tempo, comandos, eventos, políticas, read model
 
 Arquivos sugeridos (criar conforme o board fechar):
 
-- `02_01_linha-do-tempo.md` (ou imagem)
-- `02_02_agregados.md` (ou imagem)
+- `linha-do-tempo.md` (ou imagem)
+- `agregados.md` (ou imagem)

@@ -10,4 +10,4 @@ Decisões transversais aos microsserviços. ADRs de implementação local ficam 
 | 004 | Worker API split + checkpoint/retomada (Postgres + frio) | Planejado — Parte 7 |
 | 005 | Provider de e-mail SendGrid | Planejado — Parte 7 |
 
-Arquivos `001-….md` … entram nas partes correspondentes (não inventar decisão aqui no skeleton).
+Arquivos `001-….md` … entram nas partes correspondentes (não inventar decisão aqui no skeleton). A numeração dos **ADRs** é sequencial de decisão; pastas temáticas do repo **não** usam prefixo numérico.
