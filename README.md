@@ -8,11 +8,11 @@ Docs específicas de cada microsserviço ficam no repositório do serviço. Cont
 
 | Pasta / doc | Conteúdo | Status |
 |-------------|----------|--------|
-| [dominio/linguagem-onipresente.md](dominio/linguagem-onipresente.md) | Glossário do domínio | Stub |
+| [dominio/linguagem-onipresente.md](dominio/linguagem-onipresente.md) | Glossário do domínio | Preenchido |
 | [dominio/modelo-de-dados.md](dominio/modelo-de-dados.md) | ER / posse por serviço | Stub |
-| [requisitos/requisitos-funcionais-e-nao-funcionais.md](requisitos/requisitos-funcionais-e-nao-funcionais.md) | RF e RNF | Stub |
+| [requisitos/requisitos-funcionais-e-nao-funcionais.md](requisitos/requisitos-funcionais-e-nao-funcionais.md) | RF e RNF | Preenchido |
 | [requisitos/limites-de-midia.md](requisitos/limites-de-midia.md) | Limites e amostragem (fonte de verdade na GCP) | Stub |
-| [event-storming/](event-storming/) | Event storming (board, mermaid, artefatos) | Stub |
+| [event-storming/](event-storming/) | Event storming (board, mermaid, artefatos) | Preenchido |
 | [fluxo-e-estados/](fluxo-e-estados/) | Happy path, erro → e-mail, máquina de estados | Stub |
 | [arquitetura/](arquitetura/) | C4 (contexto, containers, componentes) | Stub |
 | [eventos/catalogo-de-eventos.md](eventos/catalogo-de-eventos.md) | Tópicos, payloads, idempotência | Stub |
