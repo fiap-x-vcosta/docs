@@ -23,7 +23,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md). Limites de mí
 - **RF09** — O sistema processa **mais de um vídeo ao mesmo tempo** (paralelismo entre processamentos).
 - **RF10** — Em picos, requisições/aceites de processamento **não são perdidos** (mensageria durável).
 - **RF11** — Processamento bem-sucedido gera **frames**, empacota em **`.zip`**, remove os frames temporários e gera **URL de download** (limpeza e URL podem ocorrer em paralelo após o zip).
-- **RF12** — Em **falha** no processamento, o sistema remove frames temporários (se houver) e envia **notificação de falha** por e-mail.
+- **RF12** — Em **falha** no processamento, o sistema remove frames temporários (se houver), registra o **motivo da falha** e envia **notificação de falha** por e-mail.
 - **RF13** — O usuário pode **cancelar** um processamento em andamento; o sistema remove frames temporários e **não** envia e-mail de notificação.
 
 ### Consulta, download e notificação de sucesso
@@ -32,3 +32,4 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md). Limites de mí
 - **RF15** — Após sucesso (URL gerada), o sistema envia **notificação de sucesso** por e-mail.
 - **RF16** — **Somente o usuário que enviou** o vídeo pode obter a URL e baixar o `.zip`.
 - **RF17** — O download do resultado é feito a partir da **URL de download** gerada pelo sistema.
+- **RF18** — Vídeos **cancelados** e com **falha** permanecem no histórico: o usuário consulta quais e quantos falharam ou foram cancelados e, em caso de falha, o **motivo**.

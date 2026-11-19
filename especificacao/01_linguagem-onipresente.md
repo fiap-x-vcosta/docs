@@ -13,3 +13,4 @@
 - **Progresso:** indicação de andamento do processamento (ex. frames feitos / total).
 - **Notificação de sucesso:** e-mail ao usuário quando a URL de download está disponível.
 - **Notificação de falha:** e-mail ao usuário após rejeição na triagem, falha ao persistir ou falha no processamento. Cancelamento pelo usuário não dispara notificação.
+- **Motivo de falha:** informação registrada e exibida ao usuário quando o processamento (ou etapa anterior) termina com falha.
