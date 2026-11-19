@@ -5,6 +5,7 @@
 - **Triagem:** validação do vídeo recebido (aceitação ou rejeição) antes da persistência definitiva.
 - **Processamento:** ciclo de trabalho sobre um vídeo já persistido (enfileirar, iniciar, concluir com sucesso, falhar ou cancelar).
 - **Armazenamento frio:** armazenamento durável de menor custo de acesso frequente para o vídeo original (e demais objetos de mídia conforme ADRs de storage).
+- **Armazenamento quente:** armazenamento de acesso frequente para thumbs e demais objetos que a interface precisa servir com baixa latência.
 - **Frame:** imagem extraída do vídeo durante o processamento, mantida de forma recuperável até o zip e/ou a limpeza.
 - **Thumb:** miniatura para exibição na interface.
 - **Zip:** arquivo `.zip` com as imagens extraídas do vídeo, disponível para download após o sucesso.
