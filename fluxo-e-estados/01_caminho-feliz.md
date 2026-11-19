@@ -17,14 +17,16 @@ sequenceDiagram
   BFF->>Up: encaminha upload
   Up->>Up: triagem OK
   Up->>FrioUp: grava vídeo original
-  Up->>Bus: publica vídeo persistido
+  Up->>Up: gera URL assinada de leitura
+  Up->>Bus: publica vídeo persistido + URL de leitura
   Bus->>Proc: consome enfileiramento
+  Proc->>FrioUp: GET original via URL assinada
   loop extração de frames
     Proc->>FrioProc: grava frame
     Proc->>Quente: atualiza thumb
   end
   Proc->>FrioProc: grava zip
-  par limpeza de frames e URL
+  par limpeza de frames e evento
     Proc->>FrioProc: remove frames
     Proc->>Bus: publica sucesso / zip pronto
   end

@@ -12,9 +12,9 @@ sequenceDiagram
   participant FrioProc as Storage frio Processamento
   participant Quente as Storage quente
 
-  Note over Bus,Worker: vídeo já persistido pelo Upload
-  Bus->>Worker: consome enfileiramento (ref/URL de leitura do original)
-  Worker->>FrioUp: lê vídeo original
+  Note over Bus,Worker: evento com URL assinada de leitura (gerada pelo Upload)
+  Bus->>Worker: consome enfileiramento + URL de leitura
+  Worker->>FrioUp: GET original via URL assinada
   Worker->>PGP: status processando + total estimado + checkpoint
 
   loop a cada 30 frames da fonte
