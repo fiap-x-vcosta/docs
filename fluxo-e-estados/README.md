@@ -4,8 +4,9 @@ Diagramas Mermaid de **sequência** (um arquivo por fluxo; só o diagrama).
 
 | Arquivo | Fluxo |
 |---------|--------|
-| [01_caminho-feliz.md](01_caminho-feliz.md) | Upload → sucesso → download |
-| [02_rejeicao-na-triagem.md](02_rejeicao-na-triagem.md) | Rejeição na triagem → e-mail |
-| [03_falha-ao-persistir.md](03_falha-ao-persistir.md) | Falha ao persistir → e-mail |
-| [04_falha-no-processamento.md](04_falha-no-processamento.md) | Falha no processamento → e-mail |
-| [05_cancelamento.md](05_cancelamento.md) | Cancelamento (sem e-mail) |
+| [01_caminho-feliz.md](01_caminho-feliz.md) | Upload → sucesso → download (visão ponta a ponta) |
+| [02_caminho-feliz-processamento.md](02_caminho-feliz-processamento.md) | Processamento, progresso, thumb e consulta com cache |
+| [03_rejeicao-na-triagem.md](03_rejeicao-na-triagem.md) | Rejeição na triagem → e-mail |
+| [04_falha-ao-persistir.md](04_falha-ao-persistir.md) | Falha ao persistir → e-mail |
+| [05_falha-no-processamento.md](05_falha-no-processamento.md) | Falha no processamento → e-mail |
+| [06_cancelamento.md](06_cancelamento.md) | Cancelamento (sem e-mail) |
