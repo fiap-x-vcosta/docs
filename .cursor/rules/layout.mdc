@@ -7,5 +7,5 @@ alwaysApply: true
 
 - Na raiz: apenas `README.md`, `AGENTS.md`, `.gitignore` e `.cursor/`.
 - Conteúdo em pastas temáticas: `dominio/`, `requisitos/`, `event-storming/`, `fluxo-e-estados/`, `arquitetura/`, `eventos/`, `adrs/`.
-- Sem prefixos numéricos em pastas ou arquivos.
+- Sem prefixos numéricos em pastas ou arquivos na raiz das pastas temáticas — exceção: pares Miro/transcrição em `event-storming/` (`01_…`, `02_…`).
 - Sem código-fonte de microsserviço, Terraform GCP ou compose e2e neste repo.
