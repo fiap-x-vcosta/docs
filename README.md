@@ -13,7 +13,7 @@ Docs específicas de cada microsserviço ficam no repositório do serviço. Cont
 | [especificacao/03_requisitos-nao-funcionais.md](especificacao/03_requisitos-nao-funcionais.md) | Requisitos não funcionais | Preenchido |
 | [dominio/modelo-de-dados.md](dominio/modelo-de-dados.md) | ER / posse por serviço | Stub |
 | [event-storming/](event-storming/) | Event storming (board, mermaid, artefatos) | Preenchido |
-| [fluxo-e-estados/](fluxo-e-estados/) | Fluxos Mermaid (feliz, erros, cancelamento) | Preenchido |
+| [fluxo-e-estados/](fluxo-e-estados/) | Sequências Mermaid (feliz, erros, cancelamento) | Preenchido |
 | [arquitetura/](arquitetura/) | C4 (contexto, containers, componentes) | Stub |
 | [eventos/catalogo-de-eventos.md](eventos/catalogo-de-eventos.md) | Tópicos, payloads, idempotência | Stub |
 | [adrs/](adrs/) | Decisões arquiteturais de sistema | Stub |

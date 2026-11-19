@@ -1,6 +1,6 @@
 # Fluxo e estados
 
-Diagramas Mermaid dos fluxos (um arquivo por fluxo; só o diagrama).
+Diagramas Mermaid de **sequência** (um arquivo por fluxo; só o diagrama).
 
 | Arquivo | Fluxo |
 |---------|--------|
