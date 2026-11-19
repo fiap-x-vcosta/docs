@@ -1,7 +1,12 @@
 # Fluxo e estados
 
-> **Status:** stub — a preencher.
+Diagramas Mermaid de **sequência** (um arquivo por fluxo; só o diagrama).
 
-- Caminho feliz (upload → processamento → listagem → download).
-- Caminho de erro com notificação por e-mail.
-- Máquina de estados do vídeo/job (incl. progresso).
+| Arquivo | Fluxo |
+|---------|--------|
+| [01_caminho-feliz.md](01_caminho-feliz.md) | Upload → sucesso → download (visão ponta a ponta) |
+| [02_caminho-feliz-processamento.md](02_caminho-feliz-processamento.md) | Processamento, progresso, thumb e consulta com cache |
+| [03_rejeicao-na-triagem.md](03_rejeicao-na-triagem.md) | Rejeição na triagem → e-mail |
+| [04_falha-ao-persistir.md](04_falha-ao-persistir.md) | Falha ao persistir → e-mail |
+| [05_falha-no-processamento.md](05_falha-no-processamento.md) | Falha no processamento → e-mail |
+| [06_cancelamento.md](06_cancelamento.md) | Cancelamento (sem e-mail) |
