@@ -1,16 +1,30 @@
 # Linguagem onipresente
 
 - **Usuário:** pessoa que se cadastra, autentica e faz upload de vídeo na plataforma.
-- **Vídeo:** arquivo de mídia enviado pelo usuário; após aceito, é gravado no armazenamento frio. O vínculo com o usuário dono define quem pode baixar o resultado.
+- **Vídeo:** arquivo de mídia enviado pelo usuário; após aceito, é gravado no armazenamento frio e removido junto com os frames temporários ao concluir o ciclo. O vínculo com o usuário dono define quem pode baixar o resultado.
 - **Triagem:** validação do vídeo recebido (aceitação ou rejeição) antes da persistência definitiva.
 - **Processamento:** ciclo de trabalho sobre um vídeo já persistido (enfileirar, iniciar, concluir com sucesso, falhar ou cancelar).
 - **Armazenamento frio:** armazenamento durável de menor custo de acesso frequente para o vídeo original (e demais objetos de mídia conforme ADRs de storage).
 - **Armazenamento quente:** armazenamento de acesso frequente para thumbs e demais objetos que a interface precisa servir com baixa latência.
 - **Frame:** imagem extraída do vídeo durante o processamento, mantida de forma recuperável até o zip e/ou a limpeza.
-- **Thumb:** miniatura para exibição na interface.
-- **Zip:** arquivo `.zip` com as imagens extraídas do vídeo, disponível para download após o sucesso.
-- **URL de download:** link que permite baixar o zip; somente o usuário que enviou o vídeo pode obtê-la.
-- **Progresso:** indicação de andamento do processamento (ex. frames feitos / total).
+- **Thumb:** miniatura para exibição na interface; durante o processamento pode ser um frame temporário já extraído.
+- **Zip:** arquivo `.zip` com as imagens extraídas do vídeo; após o sucesso permanece disponível pelo período de retenção (7 dias no MVP).
+- **URL de download:** URL assinada que permite baixar o zip; somente o dono pode obtê-la; permanece obtível enquanto o zip existir.
+- **Progresso:** indicação de andamento do processamento (ex. frames feitos / total); valor canônico no serviço dono, com eventual cache no BFF.
+
 - **Notificação de sucesso:** e-mail ao usuário quando a URL de download está disponível.
-- **Notificação de falha:** e-mail ao usuário após rejeição na triagem, falha ao persistir ou falha no processamento. Cancelamento pelo usuário não dispara notificação.
-- **Motivo de falha:** informação registrada e exibida ao usuário quando o processamento (ou etapa anterior) termina com falha.
+- **Notificação de falha:** e-mail ao usuário após rejeição na triagem, falha ao persistir ou falha no processamento; inclui o **motivo da falha**. Cancelamento pelo usuário não dispara notificação.
+- **Motivo de falha:** informação registrada, exibida na listagem/histórico e incluída na notificação de falha quando o ciclo termina com rejeição ou falha.
+
+## Status do processamento
+
+Status visíveis na listagem/histórico do usuário:
+
+- **Em triagem:** vídeo enviado; triagem em curso ou pendente.
+- **Rejeitado na triagem:** triagem recusou o vídeo.
+- **Falha ao persistir:** triagem aceitou, mas a gravação no armazenamento frio falhou.
+- **Enfileirado:** vídeo persistido e aguardando início do processamento.
+- **Processando:** processamento iniciado (extração de frames em andamento).
+- **Sucesso:** zip gerado e URL de download disponível.
+- **Falha:** processamento terminou com erro (motivo registrado).
+- **Cancelado:** usuário cancelou o processamento em andamento.

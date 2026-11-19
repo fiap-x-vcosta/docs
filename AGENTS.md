@@ -17,9 +17,8 @@ Documentação transversal do sistema de processamento de vídeos **FIAP X**. Or
 | Peça | Papel |
 |------|--------|
 | `README.md` | Índice |
-| `especificacao/` | Linguagem onipresente, RF e RNF (`01_`…`03_`) |
+| `especificacao/` | Linguagem onipresente, RF e RNF (`01_`…`03_`; limites de mídia na seção de RF) |
 | `dominio/` | Modelo de dados |
-| `requisitos/` | Limites de mídia |
 | `event-storming/` | Board Miro (jpg) + transcrição Markdown canônica (ver regra `event-storming-artifacts`) |
 | `fluxo-e-estados/` | Fluxos e estados |
 | `arquitetura/` | C4 |

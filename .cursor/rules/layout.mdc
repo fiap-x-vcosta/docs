@@ -6,6 +6,6 @@ alwaysApply: true
 # Layout (`docs`)
 
 - Na raiz: apenas `README.md`, `AGENTS.md`, `.gitignore` e `.cursor/`.
-- Conteúdo em pastas temáticas: `especificacao/`, `dominio/`, `requisitos/`, `event-storming/`, `fluxo-e-estados/`, `arquitetura/`, `eventos/`, `adrs/`.
+- Conteúdo em pastas temáticas: `especificacao/`, `dominio/`, `event-storming/`, `fluxo-e-estados/`, `arquitetura/`, `eventos/`, `adrs/`.
 - Sem prefixos numéricos em pastas ou arquivos na raiz das pastas temáticas — exceções: `event-storming/` (pares Miro) e `especificacao/` (`01_`…`03_`).
 - Sem código-fonte de microsserviço, Terraform GCP ou compose e2e neste repo.
