@@ -1,0 +1,13 @@
+---
+description: Event storming — Markdown canônico; JPG só para reconciliação
+alwaysApply: true
+---
+
+# Artefatos de event storming
+
+- Em `event-storming/`, o **canônico para agentes** são os arquivos `.md` (um por board Miro).
+- Os `.jpg` / `.png` são **evidência visual** do workshop (humano, entrega, vídeo).
+- Ao trabalhar domínio, eventos, agregados ou fluxos: **ler os `.md` primeiro**.
+- Abrir ou descrever imagens do Miro **somente** se o humano pedir reconciliação explícita com o board, ou se o `.md` correspondente estiver ausente/desatualizado de propósito.
+- Pares nomeados: `01_eventos.jpg` ↔ `01_eventos.md`, e assim por diante.
+- Numeração `01_`, `02_`, … é permitida **apenas** dentro de `event-storming/` para parear board Miro ↔ transcrição.
