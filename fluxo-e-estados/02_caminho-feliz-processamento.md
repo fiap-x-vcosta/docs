@@ -5,22 +5,23 @@ sequenceDiagram
   participant BFF as BFF
   participant Redis as Redis BFF
   participant Bus as Pub/Sub
-  participant Proc as Processamento
+  participant Api as Processamento API
+  participant Worker as Processamento Worker
   participant PGP as Postgres Processamento
   participant FrioUp as Storage frio Upload
   participant FrioProc as Storage frio Processamento
   participant Quente as Storage quente
 
-  Note over Bus,Proc: vídeo já persistido pelo Upload
-  Bus->>Proc: consome enfileiramento (ref/URL de leitura do original)
-  Proc->>FrioUp: lê vídeo original
-  Proc->>PGP: status processando + total estimado + checkpoint
+  Note over Bus,Worker: vídeo já persistido pelo Upload
+  Bus->>Worker: consome enfileiramento (ref/URL de leitura do original)
+  Worker->>FrioUp: lê vídeo original
+  Worker->>PGP: status processando + total estimado + checkpoint
 
   loop a cada 30 frames da fonte
-    Proc->>Proc: FFmpeg extrai frame
-    Proc->>FrioProc: grava frame
-    Proc->>Quente: atualiza thumb
-    Proc->>PGP: progresso N/total + checkpoint
+    Worker->>Worker: FFmpeg extrai frame
+    Worker->>FrioProc: grava frame
+    Worker->>Quente: atualiza thumb
+    Worker->>PGP: progresso N/total + checkpoint
   end
 
   U->>Web: consulta status (durante processando)
@@ -29,19 +30,19 @@ sequenceDiagram
   alt cache hit
     Redis-->>BFF: N/total
   else cache miss
-    BFF->>Proc: consulta progresso
-    Proc->>PGP: lê progresso canônico
-    PGP-->>Proc: N/total + status
-    Proc-->>BFF: N/total + status
+    BFF->>Api: consulta progresso
+    Api->>PGP: lê progresso canônico
+    PGP-->>Api: N/total + status
+    Api-->>BFF: N/total + status
     BFF->>Redis: grava cache-aside
   end
   BFF->>Quente: URL da thumb
   BFF-->>Web: processando + progresso + thumb
   Web-->>U: exibe progresso e thumb
 
-  Proc->>FrioProc: grava zip
-  Proc->>FrioProc: remove frames
-  Proc->>PGP: status sucesso + ref. zip
-  Proc->>Quente: thumb final (opcional)
-  Proc->>Bus: publica sucesso / zip pronto
+  Worker->>FrioProc: grava zip
+  Worker->>FrioProc: remove frames
+  Worker->>PGP: status sucesso + ref. zip
+  Worker->>Quente: thumb final (opcional)
+  Worker->>Bus: publica sucesso / zip pronto
 ```
