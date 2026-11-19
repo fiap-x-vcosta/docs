@@ -14,7 +14,7 @@ Docs específicas de cada microsserviço ficam no repositório do serviço. Cont
 | [dominio/modelo-de-dados.md](dominio/modelo-de-dados.md) | ER / posse por serviço | Stub |
 | [event-storming/](event-storming/) | Event storming (board, mermaid, artefatos) | Preenchido |
 | [fluxo-e-estados/](fluxo-e-estados/) | Sequências Mermaid (feliz, erros, cancelamento) | Preenchido |
-| [arquitetura/](arquitetura/) | C4 (contexto, containers, componentes) | Stub |
+| [arquitetura/](arquitetura/) | C4 (contexto, containers, componentes) | Preenchido |
 | [eventos/catalogo-de-eventos.md](eventos/catalogo-de-eventos.md) | Tópicos, payloads, idempotência | Stub |
 | [adrs/](adrs/) | Decisões arquiteturais de sistema | Stub |
 
