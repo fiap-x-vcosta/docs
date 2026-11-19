@@ -4,8 +4,7 @@ sequenceDiagram
   participant Web as Front
   participant BFF as BFF
   participant Up as Upload
-  participant PGU as Postgres Upload
-  participant Frio as Storage frio
+  participant FrioUp as Storage frio Upload
   participant Bus as Pub/Sub
   participant Notif as Notificação
   participant SG as SendGrid
@@ -14,9 +13,8 @@ sequenceDiagram
   Web->>BFF: upload (JWT)
   BFF->>Up: encaminha upload
   Up->>Up: triagem OK
-  Up->>Frio: tenta gravar vídeo
-  Frio-->>Up: falha
-  Up->>PGU: status falha ao persistir + motivo
+  Up->>FrioUp: tenta gravar vídeo
+  FrioUp-->>Up: falha
   Up->>Bus: publica falha ao persistir
   Bus->>Notif: consome
   Notif->>SG: e-mail de falha com motivo

@@ -1,7 +1,7 @@
 # Linguagem onipresente
 
 - **Usuário:** pessoa que se cadastra, autentica e faz upload de vídeo na plataforma.
-- **Vídeo:** arquivo de mídia enviado pelo usuário; após aceito, é gravado no armazenamento frio e removido junto com os frames temporários ao concluir o ciclo. O vínculo com o usuário dono define quem pode baixar o resultado.
+- **Vídeo:** arquivo de mídia enviado pelo usuário; após aceito, é gravado no frio do Upload e removido pelo Upload ao concluir o ciclo. O vínculo com o usuário dono define quem pode baixar o resultado.
 - **Triagem:** validação do vídeo recebido (aceitação ou rejeição) antes da persistência definitiva.
 - **Processamento:** ciclo de trabalho sobre um vídeo já persistido (enfileirar, iniciar, concluir com sucesso, falhar ou cancelar).
 - **Armazenamento frio:** armazenamento durável de menor custo de acesso frequente para o vídeo original (e demais objetos de mídia conforme ADRs de storage).
