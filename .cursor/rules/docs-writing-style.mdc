@@ -1,0 +1,13 @@
+---
+description: Estilo dos docs — só conteúdo útil; sem meta-comentários
+alwaysApply: true
+---
+
+# Escrita de documentação
+
+- Escreva **só o que o leitor precisa** (definição, regra, decisão vigente).
+- **Proibido** meta-comentários do tipo: “no storm atual…”, “não é evento de domínio…”, “foi removido…”, “observação de implementação…”, “a detalhar depois…” sem necessidade, ou desculpas sobre o que o texto não é.
+- **Proibido** reabrir ou narrar itens já descartados (ex. eventos/termos abandonados) salvo num ADR de mudança explícita.
+- Não misturar jargão de workshop (ML, sticky, board) no glossário/RF salvo quando o artefato for o próprio event storming.
+- Preferir listas simples e frases curtas; evitar tabelas quando uma lista `- termo: significado` bastar.
+- Se uma regra de naming ou posse for necessária, declare-a de forma normativa e curta — sem seção “o que evitar” recheada de histórico.

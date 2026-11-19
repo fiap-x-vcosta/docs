@@ -16,7 +16,7 @@ Limites numéricos de mídia (tamanho, duração, amostragem) ficam em [limites 
 
 - **RF04** — O usuário autenticado pode **enviar um vídeo** pela lista/upload.
 - **RF05** — Após o upload, o sistema executa **triagem**. Se rejeitado, o usuário recebe **notificação de falha** por e-mail.
-- **RF06** — Se a triagem concluir com sucesso, o sistema **persiste** o vídeo no storage frio.
+- **RF06** — Se a triagem concluir com sucesso, o sistema **persiste** o vídeo no armazenamento frio.
 - **RF07** — Se a persistência falhar, o usuário recebe **notificação de falha** por e-mail.
 
 ### Processamento
@@ -24,9 +24,9 @@ Limites numéricos de mídia (tamanho, duração, amostragem) ficam em [limites 
 - **RF08** — Vídeo persistido é **enfileirado** e o processamento é iniciado de forma assíncrona.
 - **RF09** — O sistema processa **mais de um vídeo ao mesmo tempo** (paralelismo entre processamentos).
 - **RF10** — Em picos, requisições/aceites de processamento **não são perdidos** (mensageria durável).
-- **RF11** — Processamento bem-sucedido gera **imagens**, empacota em **`.zip`**, remove **imagens temporárias** e gera **URL de download** (delete temp e URL podem ocorrer em paralelo após o zip).
-- **RF12** — Em **falha** no processamento, o sistema remove imagens temporárias (se houver) e envia **notificação de falha** por e-mail.
-- **RF13** — O usuário pode **cancelar** um processamento em andamento; o sistema remove imagens temporárias e **não** envia e-mail de notificação.
+- **RF11** — Processamento bem-sucedido gera **frames**, empacota em **`.zip`**, remove os frames temporários e gera **URL de download** (limpeza e URL podem ocorrer em paralelo após o zip).
+- **RF12** — Em **falha** no processamento, o sistema remove frames temporários (se houver) e envia **notificação de falha** por e-mail.
+- **RF13** — O usuário pode **cancelar** um processamento em andamento; o sistema remove frames temporários e **não** envia e-mail de notificação.
 
 ### Consulta, download e notificação de sucesso
 
@@ -39,9 +39,9 @@ Limites numéricos de mídia (tamanho, duração, amostragem) ficam em [limites 
 
 ### Arquitetura e persistência
 
-- **RNF01** — Arquitetura em **microsserviços**, alinhada aos agregados Usuário, Triagem, Processamento e Notificação (mais a face pública de consultas/BFF).
+- **RNF01** — Arquitetura em **microsserviços** (autenticação, triagem/upload, processamento, notificação e BFF de consultas).
 - **RNF02** — Dados de domínio **persistidos** (PostgreSQL por serviço dono, conforme ADRs).
-- **RNF03** — Mídia em **object storage multi-tier** (frio para vídeo/frames/zip; quente para thumbs de UX — detalhe em ADR de storage).
+- **RNF03** — Mídia em **object storage multi-tier** (armazenamento frio para vídeo/frames/zip; quente para thumbs — detalhe em ADR de storage).
 - **RNF04** — Única **API HTTP pública** de produto é o **BFF**; demais serviços apenas rede interna. Front estático é superfície pública separada (HTML/JS).
 - **RNF05** — Autenticação com JWT **RS256** e **JWKS**; chave privada só no serviço de autenticação.
 
@@ -58,8 +58,4 @@ Limites numéricos de mídia (tamanho, duração, amostragem) ficam em [limites 
 - **RNF11** — **CI** automático (lint, testes, Sonar); provisionamento/deploy caros na GCP são **manuais** (janela de demo).
 - **RNF12** — Observabilidade com **Datadog** (traces atravessando HTTP e Pub/Sub).
 - **RNF13** — E-mail via **SendGrid**.
-- **RNF14** — Progresso de processamento é **dado de leitura** (não evento de domínio); o BFF não compartilha banco com outros serviços (cache próprio permitido).
-
-## Fora do escopo do MVP (evoluções)
-
-Itens conscientes deixados para depois (não bloqueiam o MVP documentado aqui), entre outros: limites por usuário; prioridade de fila; retenção configurável do zip; qualidade/tipo de imagem escolhível; compartilhamento do zip com outros usuários; WebSocket de progresso; preferência fina de notificação; eventos “notificação solicitada” separados do envio.
+- **RNF14** — O BFF não compartilha banco com outros serviços; pode usar cache próprio para leituras (ex. progresso).
