@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Restrições do projeto (`docs`)
 
-- Escopo: documentação **transversal** do sistema FIAP X (requisitos, domínio, event storming, fluxos/estados, C4, catálogo de eventos, ADRs, limites de mídia).
+- Escopo: documentação **transversal** do sistema FIAP X (requisitos — inclusive limites de mídia na especificação —, domínio, event storming, fluxos/estados, C4, catálogo de eventos, ADRs).
 - Não é dono do código de domínio dos serviços, do Terraform da GCP, do compose e2e nem de collections Requestly de runtime.
 - Não inventar requisito fora do enunciado + decisões **já documentadas neste repo** (ou em outros repos da org); na dúvida, perguntar.
 - Não criar OpenAPI / `contratos-http` aqui — Swagger por serviço.
