@@ -2,6 +2,8 @@
 
 Glossário: [linguagem onipresente](01_linguagem-onipresente.md). Limites de mídia: [limites de mídia](../requisitos/limites-de-midia.md).
 
+## 19 de novembro de 2026
+
 ### Autenticação
 
 - **RF01** — O sistema permite **criar conta** com usuário e senha.

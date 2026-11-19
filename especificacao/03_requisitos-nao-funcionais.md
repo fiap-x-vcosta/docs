@@ -2,6 +2,8 @@
 
 Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 
+## 19 de novembro de 2026
+
 ### Arquitetura e persistência
 
 - **RNF01** — Arquitetura em **microsserviços** (autenticação, triagem/upload, processamento, notificação e BFF de consultas).
