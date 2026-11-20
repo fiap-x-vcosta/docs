@@ -1,4 +1,4 @@
-# 08 — `processamento-cancelado`
+# 06 — `processamento-cancelado`
 
 - **Tópico:** `processamento-cancelado`
 - **Publicador:** Processamento (Worker)

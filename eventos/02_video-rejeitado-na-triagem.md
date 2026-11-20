@@ -16,7 +16,6 @@
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
-    "email": "string",
     "motivo": "string"
   }
 }

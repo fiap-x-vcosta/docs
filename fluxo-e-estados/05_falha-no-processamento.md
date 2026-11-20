@@ -11,16 +11,18 @@ sequenceDiagram
   participant FrioUp as Storage frio Upload
   participant Quente as Storage quente Upload
   participant Notif as Notificação
+  participant Auth as Autenticação
   participant SG as SendGrid
 
   Note over Worker: vídeo já enfileirado / processando
   Worker->>Worker: falha na extração
   Worker->>FrioProc: remove frames
-  Worker->>Bus: publica processamento-falha
+  Worker->>Bus: publica processamento-finalizado (falha)
   Bus->>Up: solicita remoção do original e da thumb
   Up->>FrioUp: remove vídeo original
   Up->>Quente: remove thumb
-  Bus->>Notif: consome processamento-falha
+  Bus->>Notif: consome processamento-finalizado (falha)
+  Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico

@@ -7,6 +7,7 @@ sequenceDiagram
   participant PGU as Postgres Upload
   participant Bus as Pub/Sub
   participant Notif as Notificação
+  participant Auth as Autenticação
   participant SG as SendGrid
 
   U->>Web: envia vídeo
@@ -16,6 +17,7 @@ sequenceDiagram
   Up->>PGU: status rejeitado + motivo
   Up->>Bus: publica video-rejeitado-na-triagem
   Bus->>Notif: consome
+  Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico

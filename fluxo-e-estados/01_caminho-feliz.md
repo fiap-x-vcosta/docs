@@ -10,6 +10,7 @@ sequenceDiagram
   participant Proc as Processamento
   participant FrioProc as Storage frio Processamento
   participant Notif as Notificação
+  participant Auth as Autenticação
   participant SG as SendGrid
 
   U->>Web: envia vídeo
@@ -18,8 +19,8 @@ sequenceDiagram
   Up->>Up: triagem OK
   Up->>FrioUp: grava vídeo original
   Up->>Up: gera URL assinada de leitura
-  Up->>Bus: publica vídeo persistido + URL de leitura
-  Bus->>Proc: consome enfileiramento
+  Up->>Bus: publica persistencia-finalizada (sucesso)
+  Bus->>Proc: consome (filtro sucesso)
   Proc->>FrioUp: GET original via URL assinada
   loop extração de frames
     Proc->>FrioProc: grava frame
@@ -30,11 +31,12 @@ sequenceDiagram
   Proc->>FrioProc: grava zip
   par limpeza de frames e evento
     Proc->>FrioProc: remove frames
-    Proc->>Bus: publica processamento-sucesso
+    Proc->>Bus: publica processamento-finalizado (sucesso)
   end
   Bus->>Up: solicita remoção do original
   Up->>FrioUp: remove vídeo original
-  Bus->>Notif: consome processamento-sucesso
+  Bus->>Notif: consome processamento-finalizado (sucesso)
+  Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de sucesso
   SG-->>U: notificação de sucesso
   U->>Web: consulta status / download

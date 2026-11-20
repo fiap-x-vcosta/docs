@@ -1,4 +1,4 @@
-# 04 — `thumb-disponivel`
+# 03 — `thumb-disponivel`
 
 - **Tópico:** `thumb-disponivel`
 - **Publicador:** Processamento (Worker)

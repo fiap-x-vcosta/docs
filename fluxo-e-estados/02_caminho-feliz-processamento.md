@@ -13,8 +13,8 @@ sequenceDiagram
   participant FrioUp as Storage frio Upload
   participant FrioProc as Storage frio Processamento
 
-  Note over Bus,Worker: evento com URL assinada de leitura (gerada pelo Upload)
-  Bus->>Worker: consome enfileiramento + URL de leitura
+  Note over Bus,Worker: persistencia-finalizada (sucesso) com signedReadUrl
+  Bus->>Worker: consome (filtro sucesso)
   Worker->>FrioUp: GET original via URL assinada
   Worker->>PGP: status processando + total estimado + checkpoint
 
@@ -46,5 +46,5 @@ sequenceDiagram
   Worker->>FrioProc: grava zip
   Worker->>FrioProc: remove frames
   Worker->>PGP: status sucesso + ref. zip
-  Worker->>Bus: publica processamento-sucesso
+  Worker->>Bus: publica processamento-finalizado (sucesso)
 ```

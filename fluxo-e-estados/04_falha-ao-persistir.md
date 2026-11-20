@@ -7,6 +7,7 @@ sequenceDiagram
   participant FrioUp as Storage frio Upload
   participant Bus as Pub/Sub
   participant Notif as Notificação
+  participant Auth as Autenticação
   participant SG as SendGrid
 
   U->>Web: envia vídeo
@@ -15,8 +16,9 @@ sequenceDiagram
   Up->>Up: triagem OK
   Up->>FrioUp: tenta gravar vídeo
   FrioUp-->>Up: falha
-  Up->>Bus: publica falha-ao-persistir
-  Bus->>Notif: consome
+  Up->>Bus: publica persistencia-finalizada (falha)
+  Bus->>Notif: consome (filtro falha)
+  Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico
