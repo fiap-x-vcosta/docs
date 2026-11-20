@@ -17,9 +17,10 @@ sequenceDiagram
   Web->>BFF: upload (JWT)
   BFF->>Up: encaminha upload
   Up->>Up: triagem OK
+  Up->>Bus: publica triagem-video-finalizada (sucesso)
   Up->>FrioUp: grava vídeo original
   Up->>Up: gera URL assinada de leitura
-  Up->>Bus: publica persistencia-finalizada (sucesso)
+  Up->>Bus: publica persistencia-video-finalizada (sucesso)
   Bus->>Proc: consome (filtro sucesso)
   Proc->>FrioUp: GET original via URL assinada
   loop extração de frames
@@ -31,11 +32,11 @@ sequenceDiagram
   Proc->>FrioProc: grava zip
   par limpeza de frames e evento
     Proc->>FrioProc: remove frames
-    Proc->>Bus: publica processamento-finalizado (sucesso)
+    Proc->>Bus: publica processamento-video-finalizado (sucesso)
   end
   Bus->>Up: solicita remoção do original
   Up->>FrioUp: remove vídeo original
-  Bus->>Notif: consome processamento-finalizado (sucesso)
+  Bus->>Notif: consome processamento-video-finalizado (sucesso)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de sucesso
   SG-->>U: notificação de sucesso

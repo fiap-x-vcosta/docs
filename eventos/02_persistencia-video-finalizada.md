@@ -1,25 +1,24 @@
-# 01 — `persistencia-finalizada`
+# 02 — `persistencia-video-finalizada`
 
-- **Tópico:** `persistencia-finalizada`
+- **Tópico:** `persistencia-video-finalizada`
 - **Atributo Pub/Sub:** `resultado` = `sucesso` | `falha` (filtro de subscription)
 - **Publicador:** Upload
 - **Consumidores:** Processamento (Worker) — filtro `resultado=sucesso`; Notificação — filtro `resultado=falha`
-- **Quando:** gravação no frio conclui com sucesso ou falha (após triagem OK)
+- **Quando:** gravação no frio conclui com sucesso ou falha (após triagem com sucesso)
 
 ## Envelope
 
 ```json
 {
   "eventId": "uuid",
-  "type": "persistencia-finalizada",
+  "type": "persistencia-video-finalizada",
   "version": 1,
   "occurredAt": "2026-11-20T00:00:00Z",
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
     "resultado": "sucesso",
-    "signedReadUrl": "string",
-    "motivo": null
+    "signedReadUrl": "string"
   }
 }
 ```
@@ -27,14 +26,13 @@
 ```json
 {
   "eventId": "uuid",
-  "type": "persistencia-finalizada",
+  "type": "persistencia-video-finalizada",
   "version": 1,
   "occurredAt": "2026-11-20T00:00:00Z",
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
     "resultado": "falha",
-    "signedReadUrl": null,
     "motivo": "string"
   }
 }

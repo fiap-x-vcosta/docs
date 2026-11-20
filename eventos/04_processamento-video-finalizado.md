@@ -1,9 +1,9 @@
-# 04 — `processamento-finalizado`
+# 04 — `processamento-video-finalizado`
 
-- **Tópico:** `processamento-finalizado`
+- **Tópico:** `processamento-video-finalizado`
 - **Atributo Pub/Sub:** `resultado` = `sucesso` | `falha` (filtro de subscription)
 - **Publicador:** Processamento (Worker)
-- **Consumidores:** Upload; Notificação (ambos filtram por `resultado` conforme o efeito)
+- **Consumidores:** Upload; Notificação
 - **Quando:** processamento termina com sucesso (zip pronto, frames removidos) ou falha (após limpeza de frames)
 
 ## Envelope
@@ -11,15 +11,14 @@
 ```json
 {
   "eventId": "uuid",
-  "type": "processamento-finalizado",
+  "type": "processamento-video-finalizado",
   "version": 1,
   "occurredAt": "2026-11-20T00:00:00Z",
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
     "resultado": "sucesso",
-    "zipObjectKey": "string",
-    "motivo": null
+    "zipObjectKey": "string"
   }
 }
 ```
@@ -27,14 +26,13 @@
 ```json
 {
   "eventId": "uuid",
-  "type": "processamento-finalizado",
+  "type": "processamento-video-finalizado",
   "version": 1,
   "occurredAt": "2026-11-20T00:00:00Z",
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
     "resultado": "falha",
-    "zipObjectKey": null,
     "motivo": "string"
   }
 }

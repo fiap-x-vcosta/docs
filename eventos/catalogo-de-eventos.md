@@ -4,25 +4,25 @@ Contratos de integração via **Google Pub/Sub** ([RNF08](../especificacao/03_re
 
 E-mail do destinatário: Notificação resolve via API de Autenticação/`userId` (não via payload).
 
-Tópicos com desfecho binário usam atributo Pub/Sub `resultado` (`sucesso` | `falha`) para filtro de subscription; o `data` é um schema único com campos condicionais ao `resultado`.
+Tópicos com desfecho binário usam atributo Pub/Sub `resultado` (`sucesso` | `falha`) para filtro de subscription; o `data` inclui só os campos do desfecho.
 
 | # | Evento | Arquivo |
 |---|--------|---------|
-| 01 | `persistencia-finalizada` | [01_persistencia-finalizada.md](01_persistencia-finalizada.md) |
-| 02 | `video-rejeitado-na-triagem` | [02_video-rejeitado-na-triagem.md](02_video-rejeitado-na-triagem.md) |
+| 01 | `triagem-video-finalizada` | [01_triagem-video-finalizada.md](01_triagem-video-finalizada.md) |
+| 02 | `persistencia-video-finalizada` | [02_persistencia-video-finalizada.md](02_persistencia-video-finalizada.md) |
 | 03 | `thumb-disponivel` | [03_thumb-disponivel.md](03_thumb-disponivel.md) |
-| 04 | `processamento-finalizado` | [04_processamento-finalizado.md](04_processamento-finalizado.md) |
+| 04 | `processamento-video-finalizado` | [04_processamento-video-finalizado.md](04_processamento-video-finalizado.md) |
 | 05 | `cancelamento-solicitado` | [05_cancelamento-solicitado.md](05_cancelamento-solicitado.md) |
 | 06 | `processamento-cancelado` | [06_processamento-cancelado.md](06_processamento-cancelado.md) |
 
 ## Publicador → tópicos
 
-- **Upload:** `persistencia-finalizada`, `video-rejeitado-na-triagem`
+- **Upload:** `triagem-video-finalizada`, `persistencia-video-finalizada`
 - **Processamento API:** `cancelamento-solicitado`
-- **Processamento Worker:** `thumb-disponivel`, `processamento-finalizado`, `processamento-cancelado`
+- **Processamento Worker:** `thumb-disponivel`, `processamento-video-finalizado`, `processamento-cancelado`
 
 ## Consumidor → tópicos
 
-- **Processamento Worker:** `persistencia-finalizada` (`resultado=sucesso`), `cancelamento-solicitado`
-- **Upload:** `thumb-disponivel`, `processamento-finalizado`, `processamento-cancelado`
-- **Notificação:** `video-rejeitado-na-triagem`, `persistencia-finalizada` (`resultado=falha`), `processamento-finalizado`
+- **Processamento Worker:** `persistencia-video-finalizada` (`resultado=sucesso`), `cancelamento-solicitado`
+- **Upload:** `thumb-disponivel`, `processamento-video-finalizado`, `processamento-cancelado`
+- **Notificação:** `triagem-video-finalizada` (`resultado=falha`), `persistencia-video-finalizada` (`resultado=falha`), `processamento-video-finalizado`

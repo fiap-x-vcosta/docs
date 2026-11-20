@@ -14,9 +14,10 @@ sequenceDiagram
   Web->>BFF: upload (JWT)
   BFF->>Up: encaminha upload
   Up->>Up: triagem OK
+  Up->>Bus: publica triagem-video-finalizada (sucesso)
   Up->>FrioUp: tenta gravar vídeo
   FrioUp-->>Up: falha
-  Up->>Bus: publica persistencia-finalizada (falha)
+  Up->>Bus: publica persistencia-video-finalizada (falha)
   Bus->>Notif: consome (filtro falha)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo

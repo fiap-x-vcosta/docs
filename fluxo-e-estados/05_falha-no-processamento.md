@@ -17,11 +17,11 @@ sequenceDiagram
   Note over Worker: vídeo já enfileirado / processando
   Worker->>Worker: falha na extração
   Worker->>FrioProc: remove frames
-  Worker->>Bus: publica processamento-finalizado (falha)
+  Worker->>Bus: publica processamento-video-finalizado (falha)
   Bus->>Up: solicita remoção do original e da thumb
   Up->>FrioUp: remove vídeo original
   Up->>Quente: remove thumb
-  Bus->>Notif: consome processamento-finalizado (falha)
+  Bus->>Notif: consome processamento-video-finalizado (falha)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
