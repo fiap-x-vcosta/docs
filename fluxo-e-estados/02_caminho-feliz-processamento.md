@@ -17,11 +17,16 @@ sequenceDiagram
   Bus->>Worker: consome tópico upload-video-atualizado (persistencia/sucesso)
   Worker->>FrioUp: GET original via URL assinada
   Worker->>PGP: status processando + total estimado + checkpoint
-  Worker->>Bus: publica tópico processamento-video-atualizado (iniciado + frameReadUrl)
+  Worker->>Worker: FFmpeg extrai primeiro frame
+  Worker->>FrioProc: grava frame
+  Worker->>PGP: progresso + checkpoint
+  Worker->>Bus: publica tópico processamento-video-atualizado (iniciado)
   Bus->>Up: consome tópico processamento-video-atualizado (iniciado); status processando
+  Up->>ProcApi: GET frame válido (thumb)
+  ProcApi-->>Up: bytes / URL de leitura do frame
   Up->>Quente: grava thumb
 
-  loop a cada 30 frames da fonte
+  loop demais amostras (1 a cada 30 frames da fonte)
     Worker->>Worker: FFmpeg extrai frame
     Worker->>FrioProc: grava frame
     Worker->>PGP: progresso N/total + checkpoint

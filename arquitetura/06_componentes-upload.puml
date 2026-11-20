@@ -7,7 +7,7 @@ HIDE_STEREOTYPE()
 title upload — Componentes
 
 Container(bff, "bff", ".NET", "Upload / lista / thumb / cancelamento")
-Container(procApi, "processamento-api", ".NET", "POST cancelar")
+Container(procApi, "processamento-api", ".NET", "Cancelar; GET frame para thumb")
 
 Container_Boundary(uploadApi, "upload") {
   Component(api, "API HTTP", ".NET", "Upload, listagem, thumb, cancelamento")
@@ -42,7 +42,9 @@ Rel_R(midia, frio, "Object I/O", "HTTPS")
 Rel_R(thumbs, quente, "Object I/O", "HTTPS")
 Rel_R(outbox, pg, "Outbox", "SQL")
 Rel_R(statusProj, pg, "Status", "SQL")
+Rel_R(consumer, procApi, "GET frame (iniciado)", "HTTPS")
 Rel_R(consumer, frio, "Remove original", "HTTPS")
+Rel_R(consumer, thumbs, "Grava thumb")
 Rel_R(consumer, quente, "Thumb I/O", "HTTPS")
 
 @enduml

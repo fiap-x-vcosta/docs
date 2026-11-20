@@ -25,10 +25,13 @@ sequenceDiagram
   Up->>Bus: publica tópico upload-video-atualizado (persistencia/sucesso)
   Bus->>Worker: consome tópico upload-video-atualizado (persistencia/sucesso)
   Worker->>FrioUp: GET original via URL assinada
-  Worker->>Bus: publica tópico processamento-video-atualizado (iniciado + frameReadUrl)
-  Bus->>Up: consome tópico processamento-video-atualizado (iniciado); status processando + thumb
+  Worker->>FrioProc: grava primeiro frame
+  Worker->>Bus: publica tópico processamento-video-atualizado (iniciado)
+  Bus->>Up: consome tópico processamento-video-atualizado (iniciado); status processando
+  Up->>ProcApi: GET frame válido (thumb)
+  ProcApi-->>Up: bytes / URL de leitura do frame
   Up->>Quente: grava thumb
-  loop extração de frames
+  loop demais frames
     Worker->>FrioProc: grava frame
   end
   Worker->>FrioProc: grava zip

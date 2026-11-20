@@ -7,7 +7,7 @@
 - **Armazenamento frio:** armazenamento durável de menor custo de acesso frequente para o vídeo original (e demais objetos de mídia conforme ADRs de storage).
 - **Armazenamento quente:** armazenamento de acesso frequente em `upload` para thumbs de catálogo/listagem.
 - **Frame:** imagem extraída do vídeo durante o processamento, mantida de forma recuperável no frio de `processamento-worker` até o zip e/ou a limpeza.
-- **Thumb:** miniatura de catálogo no quente de `upload`; gravada quando `upload` consome o tópico `processamento-video-atualizado` com `iniciado` (`frameReadUrl`).
+- **Thumb:** miniatura de catálogo no quente de `upload`; quando `upload` consome o tópico `processamento-video-atualizado` com `iniciado`, faz GET em `processamento-api` (frame válido), baixa e grava no próprio quente.
 - **Zip:** arquivo `.zip` com as imagens extraídas do vídeo; após o sucesso permanece disponível pelo período de retenção (7 dias no MVP).
 - **URL de download:** URL assinada que permite baixar o zip; somente o dono pode obtê-la; permanece obtível enquanto o zip existir.
 - **Progresso:** indicação de andamento do processamento (ex. frames feitos / total); valor **canônico** em `processamento-api`; a listagem lê a projeção de status em `upload` e, se `processando`, pode consultar o progresso em `processamento-api`.
@@ -25,7 +25,7 @@ Status visíveis na listagem/histórico do usuário (projeção em `upload`):
 - **Rejeitado na triagem:** triagem recusou o vídeo.
 - **Falha ao persistir:** triagem aceitou, mas a gravação no armazenamento frio falhou.
 - **Enfileirado:** vídeo persistido; `upload` aguarda `processamento-worker` iniciar.
-- **Processando:** `processamento-worker` publicou `iniciado` no tópico `processamento-video-atualizado` (thumb pode existir).
+- **Processando:** `processamento-worker` publicou `iniciado` no tópico `processamento-video-atualizado` (thumb pode existir após o GET de `upload` a `processamento-api`).
 - **Cancelamento solicitado:** `upload` aceitou/enviou o cancelamento a `processamento-api`; `processamento-worker` ainda encerra o processamento.
 - **Sucesso:** zip gerado e URL de download disponível.
 - **Falha:** processamento terminou com erro (motivo registrado).
