@@ -1,33 +1,33 @@
 ```mermaid
-C4Component
-  title BFF Consultas — Componentes
+flowchart TB
+  web["Front"]
 
-  Container(web, "Front", "SPA estática", "Cliente HTTPS")
-  Container(auth, "Autenticação", ".NET", "JWKS")
-  Container(upload, "Upload", ".NET", "Upload e status de triagem")
-  Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento")
-  ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside")
-  ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Zip")
-  ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
+  subgraph bff["BFF Consultas"]
+    direction TB
+    gateway["API pública"]
+    agg["Agregação"]
+    cache["Cache progresso"]
+    download["Download"]
+    thumbs["Thumbs"]
+  end
 
-  Container_Boundary(bff, "BFF Consultas") {
-    Component(gateway, "API pública", ".NET", "Única janela HTTP de produto")
-    Component(agg, "Agregação", ".NET", "Orquestra chamadas internas")
-    Component(cache, "Cache Progresso", ".NET", "Cache-aside de leituras")
-    Component(download, "Download", ".NET", "Emite URL assinada do zip para o dono")
-    Component(thumbs, "Thumbs", ".NET", "Resolve URL da thumb")
-  }
+  auth["Autenticação"]
+  upload["Upload"]
+  procApi["Processamento API"]
+  redis[("Redis BFF")]
+  frioProc[("Frio Processamento")]
+  quente[("Quente — thumbs")]
 
-  Rel(web, gateway, "Usa", "HTTPS/JSON")
-  Rel(gateway, auth, "Valida JWT", "HTTPS")
-  Rel(gateway, agg, "Delega")
-  Rel(agg, upload, "Upload/triagem", "HTTPS")
-  Rel(agg, procApi, "Processamento", "HTTPS")
-  Rel(agg, cache, "Lê progresso")
-  Rel(cache, redis, "Get/Set", "TCP")
-  Rel(cache, procApi, "Miss → origem", "HTTPS")
-  Rel(agg, download, "Pede URL")
-  Rel(download, frioProc, "Assina GET", "HTTPS")
-  Rel(agg, thumbs, "Pede thumb")
-  Rel(thumbs, quente, "Assina/serve", "HTTPS")
+  web --> gateway
+  gateway --> auth
+  gateway --> agg
+  agg --> upload
+  agg --> procApi
+  agg --> cache
+  cache --> redis
+  cache --> procApi
+  agg --> download
+  download --> frioProc
+  agg --> thumbs
+  thumbs --> quente
 ```

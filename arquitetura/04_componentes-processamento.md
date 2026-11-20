@@ -1,43 +1,44 @@
 ```mermaid
-C4Component
-  title Processamento — Componentes (API + Worker)
+flowchart TB
+  bff["BFF Consultas"]
+  pubsub[["Pub/Sub"]]
 
-  Container(bff, "BFF Consultas", ".NET", "Consulta progresso e cancela")
-  ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Enfileira e conclui ciclo")
-  ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Job, progresso, checkpoint, outbox")
-  ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames e zip")
-  ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
+  subgraph api["Processamento API"]
+    direction TB
+    apiHttp["API HTTP"]
+    consulta["Consulta progresso"]
+    cancel["Cancelamento"]
+  end
 
-  Container_Boundary(procApi, "Processamento API") {
-    Component(apiHttp, "API HTTP", ".NET", "Status, progresso e cancelamento")
-    Component(consulta, "Consulta Progresso", ".NET", "Lê progresso canônico")
-    Component(cancel, "Cancelamento", ".NET", "Sinaliza job em andamento")
-  }
+  subgraph worker["Processamento Worker"]
+    direction TB
+    consumer["Consumer"]
+    ffmpeg["FFmpeg"]
+    checkpoint["Checkpoint"]
+    midiaProc["Mídia resultado"]
+    outboxW["Outbox"]
+  end
 
-  Container_Boundary(procWorker, "Processamento Worker") {
-    Component(consumer, "Consumer", ".NET", "Consome enfileiramento; idempotente")
-    Component(ffmpeg, "FFmpeg", "FFmpeg", "Extrai 1 frame a cada 30 da fonte")
-    Component(checkpoint, "Checkpoint", ".NET", "Retomada após falha de pod")
-    Component(midiaProc, "Mídia Resultado", ".NET", "Frames, zip, thumbs; limpeza de frames")
-    Component(outboxW, "Outbox", ".NET", "Publica sucesso/falha/cancelamento")
-  }
+  pgProc[("Postgres Processamento")]
+  frioProc[("Frio Processamento")]
+  quente[("Quente — thumbs")]
 
-  Rel(bff, apiHttp, "Chama", "HTTPS")
-  Rel(apiHttp, consulta, "Usa")
-  Rel(apiHttp, cancel, "Usa")
-  Rel(consulta, pgProc, "Lê", "SQL")
-  Rel(cancel, pgProc, "Escreve sinal", "SQL")
+  bff --> apiHttp
+  apiHttp --> consulta
+  apiHttp --> cancel
+  consulta --> pgProc
+  cancel --> pgProc
+  cancel -.-> consumer
 
-  Rel(pubsub, consumer, "Entrega mensagem")
-  Rel(consumer, ffmpeg, "Processa")
-  Rel(consumer, checkpoint, "Persiste/retoma")
-  Rel(ffmpeg, midiaProc, "Gera artefatos")
-  Rel(checkpoint, pgProc, "Lê/escreve", "SQL")
-  Rel(midiaProc, frioProc, "Frames/zip", "HTTPS")
-  Rel(midiaProc, quente, "Thumbs", "HTTPS")
-  Rel(midiaProc, pgProc, "Progresso", "SQL")
-  Rel(consumer, outboxW, "Registra evento")
-  Rel(outboxW, pgProc, "Outbox", "SQL")
-  Rel(outboxW, pubsub, "Publica")
-  Rel(cancel, consumer, "Interrompe job")
+  pubsub --> consumer
+  consumer --> ffmpeg
+  consumer --> checkpoint
+  ffmpeg --> midiaProc
+  checkpoint --> pgProc
+  midiaProc --> frioProc
+  midiaProc --> quente
+  midiaProc --> pgProc
+  consumer --> outboxW
+  outboxW --> pgProc
+  outboxW --> pubsub
 ```

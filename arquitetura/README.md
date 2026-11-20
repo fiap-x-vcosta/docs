@@ -1,6 +1,6 @@
 # Arquitetura (C4)
 
-Diagramas C4 em Mermaid (um arquivo por visão; só o diagrama).
+Visões C4 em Mermaid `flowchart` (layout estável; um arquivo por visão; só o diagrama).
 
 | Arquivo | Nível |
 |---------|--------|
