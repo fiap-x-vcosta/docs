@@ -17,11 +17,10 @@ sequenceDiagram
   Worker->>Worker: falha na extração
   Worker->>FrioProc: remove frames
   Worker->>Bus: publica processamento-falha
-  Worker->>Bus: publica notificacao-solicitada (falha)
   Bus->>Up: solicita remoção do original e da thumb
   Up->>FrioUp: remove vídeo original
   Up->>Quente: remove thumb
-  Bus->>Notif: consome notificacao-solicitada
+  Bus->>Notif: consome processamento-falha
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico

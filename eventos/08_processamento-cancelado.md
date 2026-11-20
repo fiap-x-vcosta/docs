@@ -1,21 +1,21 @@
-# 03 — `thumb-disponivel`
+# 08 — `processamento-cancelado`
 
-- **Tópico:** `thumb-disponivel`
+- **Tópico:** `processamento-cancelado`
 - **Publicador:** Processamento (Worker)
 - **Consumidores:** Upload
-- **Quando:** há frame utilizável como thumb de catálogo (durante `processando`)
+- **Quando:** Worker concluiu o cancelamento e removeu frames
 
 ## Envelope
 
 ```json
 {
   "eventId": "uuid",
-  "type": "thumb-disponivel",
+  "type": "processamento-cancelado",
   "version": 1,
   "occurredAt": "2026-11-20T00:00:00Z",
   "data": {
     "videoId": "uuid",
-    "frameReadUrl": "string"
+    "userId": "uuid"
   }
 }
 ```

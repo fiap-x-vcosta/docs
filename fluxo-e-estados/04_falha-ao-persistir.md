@@ -15,7 +15,7 @@ sequenceDiagram
   Up->>Up: triagem OK
   Up->>FrioUp: tenta gravar vídeo
   FrioUp-->>Up: falha
-  Up->>Bus: publica notificacao-solicitada (falha)
+  Up->>Bus: publica falha-ao-persistir
   Bus->>Notif: consome
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha

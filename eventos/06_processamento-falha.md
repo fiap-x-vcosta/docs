@@ -1,8 +1,8 @@
-# 05 — `processamento-falha`
+# 06 — `processamento-falha`
 
 - **Tópico:** `processamento-falha`
 - **Publicador:** Processamento (Worker)
-- **Consumidores:** Upload
+- **Consumidores:** Upload; Notificação
 - **Quando:** falha na extração/processamento após limpeza de frames
 
 ## Envelope
@@ -16,6 +16,7 @@
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
+    "email": "string",
     "motivo": "string"
   }
 }

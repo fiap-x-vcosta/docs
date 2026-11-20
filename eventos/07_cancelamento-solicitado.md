@@ -1,4 +1,4 @@
-# 06 — `cancelamento-solicitado`
+# 07 — `cancelamento-solicitado`
 
 - **Tópico:** `cancelamento-solicitado`
 - **Publicador:** Processamento (API)

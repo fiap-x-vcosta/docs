@@ -14,7 +14,7 @@ sequenceDiagram
   BFF->>Up: encaminha upload
   Up->>Up: triagem rejeita
   Up->>PGU: status rejeitado + motivo
-  Up->>Bus: publica notificacao-solicitada (falha)
+  Up->>Bus: publica video-rejeitado-na-triagem
   Bus->>Notif: consome
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha

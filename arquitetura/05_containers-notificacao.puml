@@ -6,12 +6,12 @@ LAYOUT_LEFT_RIGHT()
 
 title FIAP X — Containers (Notificação)
 
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "notificacao-solicitada")
-Container(notif, "Notificação", ".NET", "Consome notificacao-solicitada e envia e-mail")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de sucesso/falha")
+Container(notif, "Notificação", ".NET", "Consome eventos e envia e-mail")
 ContainerDb(pgNotif, "Postgres Notificação", "PostgreSQL", "Inbox / outbox de e-mail")
 System_Ext(sendgrid, "SendGrid", "E-mail")
 
-Rel(pubsub, notif, "Entrega notificacao-solicitada")
+Rel(pubsub, notif, "Entrega evento")
 Rel(notif, pgNotif, "Outbox", "SQL")
 Rel(notif, sendgrid, "Envia e-mail", "HTTPS")
 

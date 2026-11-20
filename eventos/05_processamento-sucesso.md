@@ -1,8 +1,8 @@
-# 04 — `processamento-sucesso`
+# 05 — `processamento-sucesso`
 
 - **Tópico:** `processamento-sucesso`
 - **Publicador:** Processamento (Worker)
-- **Consumidores:** Upload
+- **Consumidores:** Upload; Notificação
 - **Quando:** zip gravado, frames removidos, status sucesso
 
 ## Envelope
@@ -16,6 +16,7 @@
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
+    "email": "string",
     "zipObjectKey": "string"
   }
 }
