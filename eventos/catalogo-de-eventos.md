@@ -4,25 +4,23 @@ Contratos de integração via **Google Pub/Sub** ([RNF08](../especificacao/03_re
 
 E-mail do destinatário: Notificação resolve via API de Autenticação/`userId` (não via payload).
 
-Tópicos com desfecho binário usam atributo Pub/Sub `resultado` (`sucesso` | `falha`) para filtro de subscription; o `data` inclui só os campos do desfecho.
+Desfechos binários de triagem/persistência usam atributo `resultado` (`sucesso` | `falha`). Mudanças de status do job de processamento usam atributo `status` no tópico único `processamento-video-status` (sem progresso N/total).
 
 | # | Evento | Arquivo |
 |---|--------|---------|
 | 01 | `triagem-video-finalizada` | [01_triagem-video-finalizada.md](01_triagem-video-finalizada.md) |
 | 02 | `persistencia-video-finalizada` | [02_persistencia-video-finalizada.md](02_persistencia-video-finalizada.md) |
-| 03 | `thumb-disponivel` | [03_thumb-disponivel.md](03_thumb-disponivel.md) |
-| 04 | `processamento-video-finalizado` | [04_processamento-video-finalizado.md](04_processamento-video-finalizado.md) |
-| 05 | `cancelamento-solicitado` | [05_cancelamento-solicitado.md](05_cancelamento-solicitado.md) |
-| 06 | `processamento-cancelado` | [06_processamento-cancelado.md](06_processamento-cancelado.md) |
+| 03 | `processamento-video-status` | [03_processamento-video-status.md](03_processamento-video-status.md) |
+| 04 | `cancelamento-solicitado` | [04_cancelamento-solicitado.md](04_cancelamento-solicitado.md) |
 
 ## Publicador → tópicos
 
 - **Upload:** `triagem-video-finalizada`, `persistencia-video-finalizada`
 - **Processamento API:** `cancelamento-solicitado`
-- **Processamento Worker:** `thumb-disponivel`, `processamento-video-finalizado`, `processamento-cancelado`
+- **Processamento Worker:** `processamento-video-status`
 
 ## Consumidor → tópicos
 
 - **Processamento Worker:** `persistencia-video-finalizada` (`resultado=sucesso`), `cancelamento-solicitado`
-- **Upload:** `thumb-disponivel`, `processamento-video-finalizado`, `processamento-cancelado`
-- **Notificação:** `triagem-video-finalizada` (`resultado=falha`), `persistencia-video-finalizada` (`resultado=falha`), `processamento-video-finalizado`
+- **Upload:** `processamento-video-status`
+- **Notificação:** `triagem-video-finalizada` (`resultado=falha`), `persistencia-video-finalizada` (`resultado=falha`), `processamento-video-status` (`status=sucesso` \| `falha`)

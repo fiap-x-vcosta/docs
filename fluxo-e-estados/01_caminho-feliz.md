@@ -20,30 +20,31 @@ sequenceDiagram
   Up->>Bus: publica triagem-video-finalizada (sucesso)
   Up->>FrioUp: grava vídeo original
   Up->>Up: gera URL assinada de leitura
+  Up->>Up: status enfileirado
   Up->>Bus: publica persistencia-video-finalizada (sucesso)
   Bus->>Proc: consome (filtro sucesso)
   Proc->>FrioUp: GET original via URL assinada
+  Proc->>Bus: publica processamento-video-status (em-processamento + frameReadUrl)
+  Bus->>Up: atualiza status processando + thumb
+  Up->>Quente: grava thumb
   loop extração de frames
     Proc->>FrioProc: grava frame
-    Proc->>Bus: publica thumb disponível
-    Bus->>Up: atualiza thumb
-    Up->>Quente: grava/atualiza thumb
   end
   Proc->>FrioProc: grava zip
-  par limpeza de frames e evento
+  par limpeza e status
     Proc->>FrioProc: remove frames
-    Proc->>Bus: publica processamento-video-finalizado (sucesso)
+    Proc->>Bus: publica processamento-video-status (sucesso)
   end
-  Bus->>Up: solicita remoção do original
+  Bus->>Up: status sucesso; remove original
   Up->>FrioUp: remove vídeo original
-  Bus->>Notif: consome processamento-video-finalizado (sucesso)
+  Bus->>Notif: consome (filtro sucesso)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de sucesso
   SG-->>U: notificação de sucesso
   U->>Web: consulta status / download
   Web->>BFF: lista / URL (JWT)
-  BFF->>Proc: status + URL assinada do zip
-  BFF->>Up: URL da thumb
+  BFF->>Up: listagem paginada
+  BFF->>Proc: URL assinada do zip
   BFF-->>Web: status + URL
   Web-->>U: download do zip
 ```

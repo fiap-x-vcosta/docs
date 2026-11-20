@@ -15,15 +15,17 @@ sequenceDiagram
   U->>Web: cancela processamento
   Web->>BFF: cancelar (JWT)
   BFF->>Api: solicita cancelamento
-  Api->>Bus: publica cancelamento solicitado
-  Bus->>Worker: entrega cancelamento
+  Api->>Bus: publica cancelamento-solicitado
+  Bus->>Worker: entrega comando
+  Worker->>Bus: publica processamento-video-status (cancelamento-solicitado)
+  Bus->>Up: status cancelamento solicitado
   Worker->>FrioProc: remove frames
-  Worker->>Bus: publica cancelamento / conclusão
-  Bus->>Up: solicita remoção do original e da thumb
+  Worker->>Bus: publica processamento-video-status (cancelado)
+  Bus->>Up: status cancelado; remove original e thumb
   Up->>FrioUp: remove vídeo original
   Up->>Quente: remove thumb
   Note over Bus: sem notificação por e-mail
-  Api-->>BFF: cancelado
+  Api-->>BFF: aceito
   BFF-->>Web: confirmado
-  Web-->>U: status cancelado
+  Web-->>U: status cancelamento solicitado / cancelado
 ```

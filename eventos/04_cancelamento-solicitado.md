@@ -1,9 +1,9 @@
-# 05 — `cancelamento-solicitado`
+# 04 — `cancelamento-solicitado`
 
 - **Tópico:** `cancelamento-solicitado`
 - **Publicador:** Processamento (API)
 - **Consumidores:** Processamento (Worker)
-- **Quando:** dono cancela com status `enfileirado` ou `processando`
+- **Quando:** dono cancela com status `enfileirado` ou `processando` (comando para o Worker; o Upload fica sabendo via `processamento-video-status` com `cancelamento-solicitado`)
 
 ## Envelope
 

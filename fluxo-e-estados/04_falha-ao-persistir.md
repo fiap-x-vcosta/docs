@@ -17,13 +17,14 @@ sequenceDiagram
   Up->>Bus: publica triagem-video-finalizada (sucesso)
   Up->>FrioUp: tenta gravar vídeo
   FrioUp-->>Up: falha
+  Up->>Up: status falha ao persistir
   Up->>Bus: publica persistencia-video-finalizada (falha)
   Bus->>Notif: consome (filtro falha)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico
-  Web->>BFF: lista (JWT)
-  BFF->>Up: consulta status
+  Web->>BFF: lista paginada (JWT)
+  BFF->>Up: página de vídeos
   BFF-->>Web: falha ao persistir + motivo
 ```

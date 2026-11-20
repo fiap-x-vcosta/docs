@@ -12,7 +12,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RNF04** — Única **API HTTP pública** de produto é o **BFF**; demais serviços apenas rede interna. Front estático é superfície pública separada (HTML/JS).
 - **RNF05** — Autenticação com JWT **RS256** e **JWKS**; chave privada só no serviço de autenticação.
 - **RNF06** — Superfícies públicas (front e BFF) expostas apenas via **HTTPS**.
-- **RNF07** — **Posse de object storage por domínio:** Upload possui frio do **vídeo original** e quente das **thumbs** de catálogo; Processamento possui frio de **frames/zip**. Sem escrita ou exclusão cross-domínio (thumbs chegam ao Upload via evento/API).
+- **RNF07** — **Posse de object storage por domínio:** Upload possui frio do **vídeo original** e quente das **thumbs** de catálogo; Processamento possui frio de **frames/zip**. Sem escrita ou exclusão cross-domínio (thumbs chegam ao Upload via `processamento-video-status` / `em-processamento`).
 
 ### Mensageria e resiliência
 
@@ -25,7 +25,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 
 ### Progresso, download, leitura de mídia e cache
 
-- **RNF14** — Progresso e estado de processamento **canônicos** no serviço dono (PostgreSQL); o BFF **não** compartilha esse banco e pode manter **cache-aside** próprio (ex. Redis) só para leituras.
+- **RNF14** — Progresso do job é **canônico** no Processamento (PostgreSQL). A **projeção de status** para listagem/paginação fica no **Upload** (atualizada por `processamento-video-status`). O BFF **não** compartilha esses bancos e pode manter **cache-aside** próprio (ex. Redis) só para leituras de progresso.
 - **RNF15** — Download do zip via **URL assinada**, **sem** bucket público; enquanto o zip existir (retenção em [RF23](02_requisitos-funcionais.md)), o dono pode obter URL utilizável. Autorização: [RF17](02_requisitos-funcionais.md).
 - **RNF16** — O Worker obtém o **vídeo original** apenas via **URL assinada de leitura** emitida pelo Upload (evento ou API); sem IAM de leitura direta no bucket do Upload.
 - **RNF17** — A **remoção do vídeo original** é responsabilidade do **Upload**, ao consumir evento de conclusão do ciclo (sucesso, falha ou cancelamento).

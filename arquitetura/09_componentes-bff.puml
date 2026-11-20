@@ -8,9 +8,9 @@ title BFF Consultas — Componentes
 
 Container(web, "Front", "SPA estática", "Cliente HTTPS")
 Container(auth, "Autenticação", ".NET", "JWKS / login")
-Container(upload, "Upload", ".NET", "Upload, triagem, thumbs")
-Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento, URL do zip")
-ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside")
+Container(upload, "Upload", ".NET", "Upload, listagem, thumbs, status projetado")
+Container(procApi, "Processamento API", ".NET", "Progresso, cancelamento, URL do zip")
+ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de progresso")
 
 Container_Boundary(bff, "BFF Consultas") {
   Component(gateway, "API pública", ".NET", "Única janela HTTP de produto")
@@ -20,7 +20,7 @@ Container_Boundary(bff, "BFF Consultas") {
 Rel(web, gateway, "Usa", "HTTPS/JSON")
 Rel(gateway, agg, "Delega")
 Rel(agg, auth, "Login / JWT", "HTTPS")
-Rel(agg, upload, "Upload / triagem / thumb", "HTTPS")
+Rel(agg, upload, "Upload / lista / thumb", "HTTPS")
 Rel(agg, procApi, "Progresso / cancelamento / URL zip", "HTTPS")
 Rel(agg, redis, "Cache-aside", "TCP")
 

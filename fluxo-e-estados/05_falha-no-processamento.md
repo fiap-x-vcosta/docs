@@ -4,7 +4,6 @@ sequenceDiagram
   participant Web as Front
   participant BFF as BFF
   participant Bus as Pub/Sub
-  participant Api as Processamento API
   participant Worker as Processamento Worker
   participant FrioProc as Storage frio Processamento
   participant Up as Upload
@@ -17,16 +16,16 @@ sequenceDiagram
   Note over Worker: vídeo já enfileirado / processando
   Worker->>Worker: falha na extração
   Worker->>FrioProc: remove frames
-  Worker->>Bus: publica processamento-video-finalizado (falha)
-  Bus->>Up: solicita remoção do original e da thumb
+  Worker->>Bus: publica processamento-video-status (falha)
+  Bus->>Up: status falha; remove original e thumb
   Up->>FrioUp: remove vídeo original
   Up->>Quente: remove thumb
-  Bus->>Notif: consome processamento-video-finalizado (falha)
+  Bus->>Notif: consome (filtro falha)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico
-  Web->>BFF: lista (JWT)
-  BFF->>Api: consulta status
+  Web->>BFF: lista paginada (JWT)
+  BFF->>Up: página de vídeos
   BFF-->>Web: falha + motivo
 ```

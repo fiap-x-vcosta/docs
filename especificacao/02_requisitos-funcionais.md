@@ -24,13 +24,13 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RF10** — Em picos, requisições/aceites de processamento **não são perdidos** (mensageria durável).
 - **RF11** — Processamento bem-sucedido gera **frames**, empacota em **`.zip`** e gera **URL de download** (zip e URL; limpeza de frames conforme RF19).
 - **RF12** — Em **falha** no processamento, o sistema registra o **motivo da falha** e envia **notificação de falha** por e-mail **com o motivo**.
-- **RF13** — O usuário pode **cancelar** somente enquanto o status for **enfileirado** ou **processando**; após sucesso, falha, cancelado, rejeitado na triagem ou falha ao persistir, o cancelamento **não** é permitido. Cancelamento **não** envia e-mail.
-- **RF14** — A listagem/histórico do usuário inclui **todos os status** do ciclo ([status do processamento](01_linguagem-onipresente.md#status-do-processamento)), com progresso quando em andamento e **motivo** nos status de rejeição/falha.
-- **RF15** — Durante **processando**, a listagem exibe **thumb** a partir de um **frame temporário** já extraído, quando houver.
+- **RF13** — O usuário pode **cancelar** somente enquanto o status for **enfileirado** ou **processando**; após cancelamento solicitado, sucesso, falha, cancelado, rejeitado na triagem ou falha ao persistir, o cancelamento **não** é permitido. Cancelamento **não** envia e-mail.
+- **RF14** — A listagem/histórico do usuário é paginada a partir do **Upload** (projeção de status) e inclui **todos os status** do ciclo ([status do video na listagem](01_linguagem-onipresente.md#status-do-video-na-listagem)); com progresso quando `processando` (consulta ao Processamento) e **motivo** nos status de rejeição/falha.
+- **RF15** — Durante **processando**, a listagem exibe **thumb** quando o Upload já tiver gravado a miniatura a partir de `processamento-video-status` (`em-processamento`).
 - **RF16** — Após sucesso (URL gerada), o sistema envia **notificação de sucesso** por e-mail.
 - **RF17** — **Somente o usuário que enviou** o vídeo (dono) pode obter a URL de download e baixar o `.zip` desse vídeo.
 - **RF18** — O download do resultado é feito a partir da **URL de download** gerada pelo sistema (assinada; [RNF15](03_requisitos-nao-funcionais.md)).
-- **RF19** — Ao concluir o ciclo com **sucesso**, **falha** ou **cancelamento**, o **Processamento** remove **frames** no frio que possui; o **Upload**, ao consumir o evento de conclusão, remove o **vídeo original** no frio e, em **falha** ou **cancelamento**, a **thumb** no quente ([RNF07](03_requisitos-nao-funcionais.md), [RNF17](03_requisitos-nao-funcionais.md)). Em **sucesso**, a thumb de catálogo permanece no Upload.
+- **RF19** — Ao concluir o ciclo com **sucesso**, **falha** ou **cancelamento**, o **Processamento** remove **frames** no frio que possui; o **Upload**, ao consumir `processamento-video-status` (`sucesso` / `falha` / `cancelado`), remove o **vídeo original** no frio e, em **falha** ou **cancelamento**, a **thumb** no quente ([RNF07](03_requisitos-nao-funcionais.md), [RNF17](03_requisitos-nao-funcionais.md)). Em **sucesso**, a thumb de catálogo permanece no Upload.
 - **RF20** — O usuário **não** pode reenviar nem solicitar reprocessamento do mesmo vídeo após falha ou rejeição; recuperação de falha transitória é responsabilidade do próprio serviço.
 
 ### Limites de mídia e retenção
