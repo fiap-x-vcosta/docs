@@ -7,21 +7,19 @@ sequenceDiagram
   participant Api as Processamento API
   participant Worker as Processamento Worker
   participant FrioProc as Storage frio Processamento
-  participant Quente as Storage quente
   participant Up as Upload
   participant FrioUp as Storage frio Upload
+  participant Quente as Storage quente Upload
   participant Notif as Notificação
   participant SG as SendGrid
 
   Note over Worker: vídeo já enfileirado / processando
   Worker->>Worker: falha na extração
-  par limpeza no Processamento
-    Worker->>FrioProc: remove frames
-    Worker->>Quente: remove thumb temporária
-  end
+  Worker->>FrioProc: remove frames
   Worker->>Bus: publica falha no processamento
-  Bus->>Up: solicita remoção do original
+  Bus->>Up: solicita remoção do original e da thumb
   Up->>FrioUp: remove vídeo original
+  Up->>Quente: remove thumb
   Bus->>Notif: consome
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha

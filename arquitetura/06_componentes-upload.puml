@@ -1,51 +1,41 @@
 @startuml 06_componentes-upload
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-LAYOUT_WITH_LEGEND()
 LAYOUT_TOP_DOWN()
+HIDE_STEREOTYPE()
 
 title Upload — Componentes
 
-Container(bff, "BFF Consultas", ".NET", "Encaminha upload, triagem e thumbs")
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio")
-ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados e outbox")
-ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
-ContainerDb(quente, "Storage quente Upload", "Object storage", "Thumbs")
+Container(bff, "BFF", ".NET", "Upload / triagem / thumb")
 
-Container_Boundary(upload, "Upload") {
-  Component(api, "API HTTP", ".NET", "Upload, triagem, status e URL de thumb")
-  Component(triagem, "Triagem", ".NET", "Valida formato, tamanho e duração")
-  Component(midia, "Mídia original", ".NET", "Grava/remove original; emite URL assinada de leitura")
-  Component(thumbs, "Thumbs", ".NET", "Persiste thumb de catálogo no quente")
-  Component(outbox, "Outbox", ".NET", "Publicação transacional de eventos")
-  Component(consumer, "Consumer", ".NET", "Consome thumb/remoção do Processamento")
+Container_Boundary(uploadApi, "Upload") {
+  Component(api, "API HTTP", ".NET", "Entrada HTTP e URL de thumb")
+  Component(triagem, "Triagem", ".NET", "Formato, tamanho, duração")
+  Component(midia, "Mídia original", ".NET", "Frio + URL assinada de leitura")
+  Component(outbox, "Outbox", ".NET", "Publicação transacional")
+  Component(thumbs, "Thumbs", ".NET", "Quente de catálogo")
 }
 
-Rel(bff, api, "Chama", "HTTPS")
-Rel(api, triagem, "Valida")
-Rel(api, midia, "Persiste ou remove")
-Rel(api, thumbs, "Serve URL")
-Rel(api, outbox, "Registra evento")
-Rel(triagem, pgUpload, "Lê/escreve", "SQL")
-Rel(midia, frioUp, "Object I/O", "HTTPS")
-Rel(midia, pgUpload, "Metadados", "SQL")
-Rel(thumbs, quente, "Object I/O", "HTTPS")
-Rel(thumbs, pgUpload, "Metadados", "SQL")
-Rel(outbox, pgUpload, "Outbox", "SQL")
-Rel(outbox, pubsub, "Publica")
-Rel(pubsub, consumer, "Entrega")
-Rel(consumer, thumbs, "Atualiza thumb")
-Rel(consumer, midia, "Remove original")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos")
 
-Lay_D(bff, api)
-Lay_R(triagem, midia)
-Lay_R(midia, thumbs)
-Lay_R(thumbs, outbox)
-Lay_D(api, triagem)
-Lay_D(outbox, pubsub)
-Lay_D(triagem, pgUpload)
-Lay_D(midia, frioUp)
-Lay_D(thumbs, quente)
-Lay_R(pubsub, consumer)
+Container_Boundary(uploadConsumer, "Upload Consumer") {
+  Component(consumer, "Consumer", ".NET", "Thumb e remoção do original")
+}
+
+ContainerDb(pg, "Postgres", "PostgreSQL", "Metadados / outbox")
+ContainerDb(frio, "Frio Upload", "Object storage", "Vídeo original")
+ContainerDb(quente, "Quente Upload", "Object storage", "Thumbs")
+
+Rel_D(bff, api, "Chama", "HTTPS")
+Rel_D(api, triagem, "Valida")
+Rel_D(triagem, midia, "OK → persiste")
+Rel_D(midia, outbox, "Evento + URL leitura")
+Rel_D(outbox, pubsub, "Publica")
+Rel_D(pubsub, consumer, "Entrega")
+
+Rel_R(api, thumbs, "Serve URL")
+Rel_R(thumbs, quente, "Object I/O", "HTTPS")
+Rel_R(midia, frio, "Object I/O", "HTTPS")
+Rel_R(outbox, pg, "Outbox", "SQL")
 
 @enduml

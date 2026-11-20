@@ -30,7 +30,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RF16** — Após sucesso (URL gerada), o sistema envia **notificação de sucesso** por e-mail.
 - **RF17** — **Somente o usuário que enviou** o vídeo (dono) pode obter a URL de download e baixar o `.zip` desse vídeo.
 - **RF18** — O download do resultado é feito a partir da **URL de download** gerada pelo sistema (assinada; [RNF15](03_requisitos-nao-funcionais.md)).
-- **RF19** — Ao concluir o ciclo com **sucesso**, **falha** ou **cancelamento**, o **Processamento** remove **frames** (e thumbs temporárias) no storage que possui; o **Upload** remove o **vídeo original** no seu frio ao consumir o evento de conclusão ([RNF07](03_requisitos-nao-funcionais.md), [RNF17](03_requisitos-nao-funcionais.md)).
+- **RF19** — Ao concluir o ciclo com **sucesso**, **falha** ou **cancelamento**, o **Processamento** remove **frames** no frio que possui; o **Upload**, ao consumir o evento de conclusão, remove o **vídeo original** no frio e, em **falha** ou **cancelamento**, a **thumb** no quente ([RNF07](03_requisitos-nao-funcionais.md), [RNF17](03_requisitos-nao-funcionais.md)). Em **sucesso**, a thumb de catálogo permanece no Upload.
 - **RF20** — O usuário **não** pode reenviar nem solicitar reprocessamento do mesmo vídeo após falha ou rejeição; recuperação de falha transitória é responsabilidade do próprio serviço.
 
 ### Limites de mídia e retenção
@@ -48,5 +48,5 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **Amostragem de frames:** **1 frame a cada 30 frames** da fonte (em vídeo 30 fps ≈ 1 frame por segundo).
 - **Retenção do zip:** **7 dias** após o sucesso; depois o objeto é removido.
 - **Validade da URL de download:** alinhada à existência do zip (enquanto o objeto for válido, o sistema fornece URL assinada utilizável).
-- **Vídeo original:** removido pelo **Upload** ao concluir o ciclo; frames/thumbs removidos pelo **Processamento** (RF19).
+- **Vídeo original:** removido pelo **Upload** ao concluir o ciclo; **frames** removidos pelo **Processamento**; **thumb** removida pelo **Upload** em falha/cancelamento (RF19).
 - **Limite por usuário:** **nenhum** (RF24).

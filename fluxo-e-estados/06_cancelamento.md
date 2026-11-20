@@ -4,25 +4,24 @@ sequenceDiagram
   participant Web as Front
   participant BFF as BFF
   participant Api as Processamento API
-  participant Worker as Processamento Worker
   participant Bus as Pub/Sub
+  participant Worker as Processamento Worker
   participant FrioProc as Storage frio Processamento
-  participant Quente as Storage quente
   participant Up as Upload
   participant FrioUp as Storage frio Upload
+  participant Quente as Storage quente Upload
 
   Note over U,Api: status enfileirado ou processando
   U->>Web: cancela processamento
   Web->>BFF: cancelar (JWT)
   BFF->>Api: solicita cancelamento
-  Api->>Worker: sinaliza cancelamento
-  par limpeza no Processamento
-    Worker->>FrioProc: remove frames
-    Worker->>Quente: remove thumb temporária
-  end
-  Worker->>Bus: publica cancelamento
-  Bus->>Up: solicita remoção do original
+  Api->>Bus: publica cancelamento solicitado
+  Bus->>Worker: entrega cancelamento
+  Worker->>FrioProc: remove frames
+  Worker->>Bus: publica cancelamento / conclusão
+  Bus->>Up: solicita remoção do original e da thumb
   Up->>FrioUp: remove vídeo original
+  Up->>Quente: remove thumb
   Note over Bus: sem notificação por e-mail
   Api-->>BFF: cancelado
   BFF-->>Web: confirmado
