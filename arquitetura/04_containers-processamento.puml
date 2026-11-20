@@ -1,0 +1,28 @@
+@startuml 04_containers-processamento
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title FIAP X — Containers (Processamento)
+
+Container(bff, "BFF Consultas", ".NET", "Status, progresso, cancelamento, URL do zip")
+Container(procApi, "Processamento API", ".NET", "Status, progresso e cancelamento")
+Container(procWorker, "Processamento Worker", ".NET + FFmpeg", "Extração, zip, checkpoint")
+ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Job, progresso canônico, checkpoint")
+ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames e zip")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Enfileiramento, conclusão, cancelamento")
+
+Rel(bff, procApi, "Status / progresso / cancelamento / URL zip", "HTTPS")
+Rel(procApi, pgProc, "Lê/escreve", "SQL")
+Rel(procWorker, pgProc, "Checkpoint / progresso", "SQL")
+Rel(procWorker, pubsub, "Consome/publica")
+Rel(procWorker, frioProc, "Frames e zip", "HTTPS")
+
+Lay_D(bff, procApi)
+Lay_R(procApi, procWorker)
+Lay_D(procApi, pgProc)
+Lay_D(procWorker, frioProc)
+Lay_R(procWorker, pubsub)
+
+@enduml

@@ -5,10 +5,10 @@ sequenceDiagram
   participant BFF as BFF
   participant Up as Upload
   participant FrioUp as Storage frio Upload
+  participant Quente as Storage quente Upload
   participant Bus as Pub/Sub
   participant Proc as Processamento
   participant FrioProc as Storage frio Processamento
-  participant Quente as Storage quente
   participant Notif as Notificação
   participant SG as SendGrid
 
@@ -23,7 +23,9 @@ sequenceDiagram
   Proc->>FrioUp: GET original via URL assinada
   loop extração de frames
     Proc->>FrioProc: grava frame
-    Proc->>Quente: atualiza thumb
+    Proc->>Bus: publica thumb disponível
+    Bus->>Up: atualiza thumb
+    Up->>Quente: grava/atualiza thumb
   end
   Proc->>FrioProc: grava zip
   par limpeza de frames e evento
@@ -37,8 +39,8 @@ sequenceDiagram
   SG-->>U: notificação de sucesso
   U->>Web: consulta status / download
   Web->>BFF: lista / URL (JWT)
-  BFF->>Proc: consulta status
-  BFF->>FrioProc: gera URL assinada do zip
+  BFF->>Proc: status + URL assinada do zip
+  BFF->>Up: URL da thumb
   BFF-->>Web: status + URL
   Web-->>U: download do zip
 ```

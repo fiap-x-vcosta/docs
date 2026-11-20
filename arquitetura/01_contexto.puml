@@ -1,0 +1,17 @@
+@startuml 01_contexto
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
+
+title FIAP X — Contexto
+
+Person(usuario, "Usuário", "Cadastra-se, envia vídeos, consulta status e baixa o zip")
+System(fiapx, "FIAP X", "Processa vídeos, extrai frames, gera zip e notifica o usuário")
+System_Ext(sendgrid, "SendGrid", "Entrega e-mails de sucesso e falha")
+
+Rel(usuario, fiapx, "Usa", "HTTPS")
+Rel(fiapx, sendgrid, "Envia e-mail", "HTTPS")
+Rel_Back(usuario, sendgrid, "Envia e-mails para")
+
+@enduml

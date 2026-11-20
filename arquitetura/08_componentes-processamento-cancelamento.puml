@@ -1,0 +1,33 @@
+@startuml 08_componentes-processamento-cancelamento
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_TOP_DOWN()
+HIDE_STEREOTYPE()
+
+title Processamento — Cancelamento
+
+Container(bff, "BFF", ".NET", "Solicita cancelamento")
+
+Container_Boundary(procApi, "Processamento API") {
+  Component(apiHttp, "API HTTP", ".NET", "POST cancelar")
+  Component(cancel, "Cancelamento", ".NET", "Status + outbox")
+}
+
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Cancelamento solicitado")
+
+Container_Boundary(procWorker, "Processamento Worker") {
+  Component(consumer, "Consumer", ".NET", "Para o job e limpa frames")
+}
+
+ContainerDb(pgProc, "Postgres", "PostgreSQL", "Status do job")
+ContainerDb(frioProc, "Frio Processamento", "Object storage", "Frames")
+
+Rel_D(bff, apiHttp, "Cancelar", "HTTPS")
+Rel_D(apiHttp, cancel, "Usa")
+Rel_D(cancel, pubsub, "Publica")
+Rel_D(pubsub, consumer, "Entrega")
+Rel_R(cancel, pgProc, "cancelando", "SQL")
+Rel_R(consumer, frioProc, "Remove frames", "HTTPS")
+Rel_R(consumer, pgProc, "cancelado", "SQL")
+
+@enduml

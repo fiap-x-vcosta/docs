@@ -8,11 +8,11 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 
 - **RNF01** — Arquitetura em **microsserviços** (autenticação, triagem/upload, processamento, notificação e BFF de consultas).
 - **RNF02** — Dados de domínio **persistidos** (PostgreSQL por serviço dono, conforme ADRs).
-- **RNF03** — Mídia em **object storage multi-tier** (armazenamento frio para vídeo/frames/zip; quente para thumbs — detalhe em ADR de storage).
+- **RNF03** — Mídia em **object storage multi-tier** (frio para vídeo/frames/zip; quente para thumbs de catálogo — detalhe em ADR de storage).
 - **RNF04** — Única **API HTTP pública** de produto é o **BFF**; demais serviços apenas rede interna. Front estático é superfície pública separada (HTML/JS).
 - **RNF05** — Autenticação com JWT **RS256** e **JWKS**; chave privada só no serviço de autenticação.
 - **RNF06** — Superfícies públicas (front e BFF) expostas apenas via **HTTPS**.
-- **RNF07** — **Posse de object storage por domínio:** frio do **vídeo original** só no Upload; frio de **frames/zip** e quente de **thumbs** só no Processamento. Sem escrita ou exclusão cross-domínio.
+- **RNF07** — **Posse de object storage por domínio:** Upload possui frio do **vídeo original** e quente das **thumbs** de catálogo; Processamento possui frio de **frames/zip**. Sem escrita ou exclusão cross-domínio (thumbs chegam ao Upload via evento/API).
 
 ### Mensageria e resiliência
 

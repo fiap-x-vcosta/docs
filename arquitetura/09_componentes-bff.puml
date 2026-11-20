@@ -1,0 +1,34 @@
+@startuml 09_componentes-bff
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title BFF Consultas — Componentes
+
+Container(web, "Front", "SPA estática", "Cliente HTTPS")
+Container(auth, "Autenticação", ".NET", "JWKS / login")
+Container(upload, "Upload", ".NET", "Upload, triagem, thumbs")
+Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento, URL do zip")
+ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside")
+
+Container_Boundary(bff, "BFF Consultas") {
+  Component(gateway, "API pública", ".NET", "Única janela HTTP de produto")
+  Component(agg, "Agregação", ".NET", "Orquestra auth, upload, processamento e cache")
+}
+
+Rel(web, gateway, "Usa", "HTTPS/JSON")
+Rel(gateway, agg, "Delega")
+Rel(agg, auth, "Login / JWT", "HTTPS")
+Rel(agg, upload, "Upload / triagem / thumb", "HTTPS")
+Rel(agg, procApi, "Progresso / cancelamento / URL zip", "HTTPS")
+Rel(agg, redis, "Cache-aside", "TCP")
+
+Lay_D(web, gateway)
+Lay_D(gateway, agg)
+Lay_D(agg, redis)
+Lay_R(auth, upload)
+Lay_R(upload, procApi)
+Lay_D(agg, auth)
+
+@enduml
