@@ -3,7 +3,7 @@ C4Component
   title Upload — Componentes
 
   Container(bff, "BFF Consultas", ".NET", "Encaminha upload e consultas")
-  ContainerQueue(pubsub, "Pub/Sub", "Google Pub/Sub", "Eventos de domínio")
+  ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio")
   ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados e outbox")
   ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
 
@@ -22,5 +22,5 @@ C4Component
   Rel(midia, frioUp, "Object I/O", "HTTPS")
   Rel(midia, pgUpload, "Metadados", "SQL")
   Rel(outbox, pgUpload, "Outbox", "SQL")
-  Rel(outbox, pubsub, "Publica", "gRPC/HTTPS")
+  Rel(outbox, pubsub, "Publica")
 ```

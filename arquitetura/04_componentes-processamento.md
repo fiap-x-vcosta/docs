@@ -3,7 +3,7 @@ C4Component
   title Processamento — Componentes (API + Worker)
 
   Container(bff, "BFF Consultas", ".NET", "Consulta progresso e cancela")
-  ContainerQueue(pubsub, "Pub/Sub", "Google Pub/Sub", "Enfileira e conclui ciclo")
+  ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Enfileira e conclui ciclo")
   ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Job, progresso, checkpoint, outbox")
   ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames e zip")
   ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
@@ -38,6 +38,6 @@ C4Component
   Rel(midiaProc, pgProc, "Progresso", "SQL")
   Rel(consumer, outboxW, "Registra evento")
   Rel(outboxW, pgProc, "Outbox", "SQL")
-  Rel(outboxW, pubsub, "Publica", "gRPC/HTTPS")
+  Rel(outboxW, pubsub, "Publica")
   Rel(cancel, consumer, "Interrompe job")
 ```

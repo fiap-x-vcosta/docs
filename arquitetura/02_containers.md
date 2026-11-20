@@ -12,21 +12,19 @@ C4Container
     Container(procApi, "Processamento API", ".NET", "Status, progresso e cancelamento")
     Container(procWorker, "Processamento Worker", ".NET + FFmpeg", "Extração, zip, checkpoint, thumbs")
     Container(notif, "Notificação", ".NET", "Consome eventos e envia e-mail")
-    Container(infraStorage, "infra-storage", "Terraform", "Provisiona buckets frio/quente no demo-up/down")
   }
 
   ContainerDb(pgAuth, "Postgres Autenticação", "PostgreSQL", "Usuários e credenciais")
   ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados de upload/triagem")
   ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Job, progresso canônico, checkpoint")
-  ContainerDb(pgNotif, "Postgres Notificação", "PostgreSQL", "Outbox/inbox de e-mail")
-  ContainerDb(redis, "Redis BFF", "Memorystore", "Cache-aside de leituras (ex. progresso)")
+  ContainerDb(pgNotif, "Postgres Notificação", "PostgreSQL", "Outbox de e-mail")
+  ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de leituras (ex. progresso)")
   ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
   ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames e zip")
   ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
-  ContainerQueue(pubsub, "Pub/Sub", "Google Pub/Sub", "Tópicos de domínio + DLQ")
+  ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Tópicos de domínio + DLQ")
 
   System_Ext(sendgrid, "SendGrid", "E-mail")
-  System_Ext(datadog, "Datadog", "Observabilidade")
 
   Rel(usuario, web, "Usa", "HTTPS")
   Rel(web, bff, "API de produto (incl. auth)", "HTTPS/JSON")
@@ -39,28 +37,17 @@ C4Container
 
   Rel(upload, pgUpload, "Lê/escreve", "SQL")
   Rel(upload, frioUp, "Grava/remove original", "HTTPS")
-  Rel(upload, pubsub, "Publica eventos + URL de leitura", "gRPC/HTTPS")
+  Rel(upload, pubsub, "Publica eventos + URL de leitura")
 
   Rel(procApi, pgProc, "Lê/escreve status", "SQL")
   Rel(procWorker, pgProc, "Checkpoint e progresso", "SQL")
-  Rel(procWorker, pubsub, "Consome/publica", "gRPC/HTTPS")
+  Rel(procWorker, pubsub, "Consome/publica")
   Rel(procWorker, frioUp, "GET original via URL assinada", "HTTPS")
   Rel(procWorker, frioProc, "Frames e zip", "HTTPS")
   Rel(procWorker, quente, "Thumbs", "HTTPS")
 
   Rel(auth, pgAuth, "Lê/escreve", "SQL")
   Rel(notif, pgNotif, "Outbox", "SQL")
-  Rel(notif, pubsub, "Consome", "gRPC/HTTPS")
+  Rel(notif, pubsub, "Consome")
   Rel(notif, sendgrid, "Envia e-mail", "HTTPS")
-
-  Rel(infraStorage, frioUp, "Provisiona")
-  Rel(infraStorage, frioProc, "Provisiona")
-  Rel(infraStorage, quente, "Provisiona")
-
-  Rel(bff, datadog, "Traces")
-  Rel(upload, datadog, "Traces")
-  Rel(procApi, datadog, "Traces")
-  Rel(procWorker, datadog, "Traces")
-  Rel(notif, datadog, "Traces")
-  Rel(auth, datadog, "Traces")
 ```

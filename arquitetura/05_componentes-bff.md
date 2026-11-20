@@ -6,7 +6,7 @@ C4Component
   Container(auth, "Autenticação", ".NET", "JWKS")
   Container(upload, "Upload", ".NET", "Upload e status de triagem")
   Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento")
-  ContainerDb(redis, "Redis BFF", "Memorystore", "Cache-aside")
+  ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside")
   ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Zip")
   ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
 
