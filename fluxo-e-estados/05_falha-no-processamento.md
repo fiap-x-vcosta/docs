@@ -2,30 +2,30 @@
 sequenceDiagram
   actor U as Usuário
   participant Web as Front
-  participant BFF as BFF
+  participant Bff as bff
   participant Bus as Pub/Sub
-  participant Worker as Processamento Worker
-  participant FrioProc as Storage frio Processamento
-  participant Up as Upload
-  participant FrioUp as Storage frio Upload
-  participant Quente as Storage quente Upload
-  participant Notif as Notificação
-  participant Auth as Autenticação
+  participant Worker as processamento-worker
+  participant FrioProc as Storage frio processamento
+  participant Up as upload
+  participant FrioUp as Storage frio upload
+  participant Quente as Storage quente upload
+  participant Notif as notificacao
+  participant Auth as autenticacao
   participant SG as SendGrid
 
   Note over Worker: vídeo já enfileirado / processando
   Worker->>Worker: falha na extração
   Worker->>FrioProc: remove frames
-  Worker->>Bus: publica processamento-video-status (falha)
-  Bus->>Up: status falha; remove original e thumb
+  Worker->>Bus: publica tópico processamento-video-atualizado (falha)
+  Bus->>Up: consome tópico processamento-video-atualizado (falha); remove original e thumb
   Up->>FrioUp: remove vídeo original
   Up->>Quente: remove thumb
-  Bus->>Notif: consome (filtro falha)
+  Bus->>Notif: consome tópico processamento-video-atualizado (falha)
   Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico
-  Web->>BFF: lista paginada (JWT)
-  BFF->>Up: página de vídeos
-  BFF-->>Web: falha + motivo
+  Web->>Bff: lista paginada (JWT)
+  Bff->>Up: página de vídeos
+  Bff-->>Web: falha + motivo
 ```

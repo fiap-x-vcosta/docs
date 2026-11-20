@@ -2,26 +2,26 @@
 sequenceDiagram
   actor U as Usuário
   participant Web as Front
-  participant BFF as BFF
-  participant Up as Upload
-  participant Redis as Redis BFF
-  participant Api as Processamento API
+  participant Bff as bff
+  participant Up as upload
+  participant Redis as Redis bff
+  participant ProcApi as processamento-api
 
   U->>Web: abre lista de vídeos
-  Web->>BFF: GET /videos?page&pageSize (JWT)
-  BFF->>Up: página ordenada (projeção de status + thumb)
-  Up-->>BFF: itens + total
+  Web->>Bff: GET /videos?page&pageSize (JWT)
+  Bff->>Up: página ordenada (projeção de status + thumb)
+  Up-->>Bff: itens + total
   loop itens com status processando
-    BFF->>Redis: progresso em cache
+    Bff->>Redis: progresso em cache
     alt cache miss
-      BFF->>Api: progresso N/total do videoId
-      Api-->>BFF: N/total
-      BFF->>Redis: cache-aside
+      Bff->>ProcApi: progresso N/total do videoId
+      ProcApi-->>Bff: N/total
+      Bff->>Redis: cache-aside
     end
   end
   alt item sucesso e usuário pede download
-    BFF->>Api: URL assinada do zip
+    Bff->>ProcApi: URL assinada do zip
   end
-  BFF-->>Web: página unificada
+  Bff-->>Web: página unificada
   Web-->>U: lista com status (e progresso se processando)
 ```

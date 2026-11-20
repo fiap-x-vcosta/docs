@@ -4,28 +4,30 @@
 LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
 
-title Processamento — Cancelamento
+title processamento — Cancelamento
 
-Container(bff, "BFF", ".NET", "Solicita cancelamento")
+Container(bff, "bff", ".NET", "Encaminha cancelamento")
+Container(upload, "upload", ".NET", "Projeção Cancelamento solicitado + chama processamento-api")
 
-Container_Boundary(procApi, "Processamento API") {
+Container_Boundary(procApi, "processamento-api") {
   Component(apiHttp, "API HTTP", ".NET", "POST cancelar")
   Component(cancel, "Cancelamento", ".NET", "Status + outbox")
 }
 
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Cancelamento solicitado")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "cancelamento-solicitado")
 
-Container_Boundary(procWorker, "Processamento Worker") {
-  Component(consumer, "Consumer", ".NET", "Para o job e limpa frames")
+Container_Boundary(procWorker, "processamento-worker") {
+  Component(consumer, "Consumer", ".NET", "Para o processamento e limpa frames")
 }
 
-ContainerDb(pgProc, "Postgres", "PostgreSQL", "Status do job")
-ContainerDb(frioProc, "Frio Processamento", "Object storage", "Frames")
+ContainerDb(pgProc, "Postgres processamento", "PostgreSQL", "Status do processamento")
+ContainerDb(frioProc, "Frio processamento", "Object storage", "Frames")
 
-Rel_D(bff, apiHttp, "Cancelar", "HTTPS")
+Rel_D(bff, upload, "Cancelar", "HTTPS")
+Rel_D(upload, apiHttp, "Cancelar", "HTTPS")
 Rel_D(apiHttp, cancel, "Usa")
-Rel_D(cancel, pubsub, "Publica")
-Rel_D(pubsub, consumer, "Entrega")
+Rel_D(cancel, pubsub, "Publica cancelamento-solicitado")
+Rel_D(pubsub, consumer, "Entrega cancelamento-solicitado")
 Rel_R(cancel, pgProc, "cancelando", "SQL")
 Rel_R(consumer, frioProc, "Remove frames", "HTTPS")
 Rel_R(consumer, pgProc, "cancelado", "SQL")

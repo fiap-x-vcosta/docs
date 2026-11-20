@@ -4,14 +4,14 @@
 LAYOUT_WITH_LEGEND()
 LAYOUT_TOP_DOWN()
 
-title Processamento — Consulta de progresso
+title processamento-api — Consulta de progresso
 
-Container(bff, "BFF Consultas", ".NET", "Lista no Upload; progresso no Processamento")
-Container(upload, "Upload", ".NET", "Projeção de status e thumb")
-ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de progresso")
-ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Progresso canônico")
+Container(bff, "bff", ".NET", "Lista em upload; progresso em processamento-api")
+Container(upload, "upload", ".NET", "Projeção de status e thumb")
+ContainerDb(redis, "Redis bff", "Redis", "Cache-aside de progresso")
+ContainerDb(pgProc, "Postgres processamento", "PostgreSQL", "Progresso canônico")
 
-Container_Boundary(procApi, "Processamento API") {
+Container_Boundary(procApi, "processamento-api") {
   Component(apiHttp, "API HTTP", ".NET", "Progresso e URL do zip")
   Component(consulta, "Consulta progresso", ".NET", "Lê progresso canônico")
 }

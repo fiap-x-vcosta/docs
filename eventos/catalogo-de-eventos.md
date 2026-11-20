@@ -2,25 +2,24 @@
 
 Contratos de integração via **Google Pub/Sub** ([RNF08](../especificacao/03_requisitos-nao-funcionais.md)–[RNF10](../especificacao/03_requisitos-nao-funcionais.md)). Fonte: [fluxos](../fluxo-e-estados/) e [C4](../arquitetura/). Publicação e consumo: [ADR 003](../adrs/003-outbox-inbox.md).
 
-E-mail do destinatário: Notificação resolve via API de Autenticação/`userId` (não via payload).
+E-mail do destinatário: `notificacao` resolve via `autenticacao`/`userId` (não via payload).
 
-Desfechos binários de triagem/persistência usam atributo `resultado` (`sucesso` | `falha`). Mudanças de status do job de processamento usam atributo `status` no tópico único `processamento-video-status` (sem progresso N/total).
+Desfechos de triagem/persistência: tópico `upload-video-atualizado` (atributos `etapa` + `resultado`). Ciclo de vida do processamento: tópico `processamento-video-atualizado` (atributo `status`). Consumidores por filtro estão em cada arquivo.
 
-| # | Evento | Arquivo |
-|---|--------|---------|
-| 01 | `triagem-video-finalizada` | [01_triagem-video-finalizada.md](01_triagem-video-finalizada.md) |
-| 02 | `persistencia-video-finalizada` | [02_persistencia-video-finalizada.md](02_persistencia-video-finalizada.md) |
-| 03 | `processamento-video-status` | [03_processamento-video-status.md](03_processamento-video-status.md) |
-| 04 | `cancelamento-solicitado` | [04_cancelamento-solicitado.md](04_cancelamento-solicitado.md) |
+| # | Evento | Escopo | Arquivo |
+|---|--------|--------|---------|
+| 01 | `upload-video-atualizado` | externo | [01_upload-video-atualizado.md](01_upload-video-atualizado.md) |
+| 02 | `processamento-video-atualizado` | externo | [02_processamento-video-atualizado.md](02_processamento-video-atualizado.md) |
+| 03 | `cancelamento-solicitado` | interno | [03_cancelamento-solicitado.md](03_cancelamento-solicitado.md) |
 
 ## Publicador → tópicos
 
-- **Upload:** `triagem-video-finalizada`, `persistencia-video-finalizada`
-- **Processamento API:** `cancelamento-solicitado`
-- **Processamento Worker:** `processamento-video-status`
+- **`upload`:** `upload-video-atualizado`
+- **`processamento-api`:** `cancelamento-solicitado`
+- **`processamento-worker`:** `processamento-video-atualizado`
 
 ## Consumidor → tópicos
 
-- **Processamento Worker:** `persistencia-video-finalizada` (`resultado=sucesso`), `cancelamento-solicitado`
-- **Upload:** `processamento-video-status`
-- **Notificação:** `triagem-video-finalizada` (`resultado=falha`), `persistencia-video-finalizada` (`resultado=falha`), `processamento-video-status` (`status=sucesso` \| `falha`)
+- **`processamento-worker`:** `upload-video-atualizado` (`etapa=persistencia`, `resultado=sucesso`), `cancelamento-solicitado`
+- **`upload`:** `processamento-video-atualizado`
+- **`notificacao`:** `upload-video-atualizado` (`resultado=falha`), `processamento-video-atualizado` (`status=sucesso` \| `falha`)
