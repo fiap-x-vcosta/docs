@@ -23,7 +23,7 @@ Documentação transversal do sistema de processamento de vídeos **FIAP X**. Or
 | `fluxo-e-estados/` | Fluxos e estados |
 | `arquitetura/` | C4 (`01_`… PlantUML + SVG; índice no README; ver `arquitetura-c4-artifacts`) |
 | `eventos/` | Catálogo de eventos (`catalogo-de-eventos.md` + `01_`… por evento) |
-| `adrs/` | ADRs de sistema (storage, progresso/Redis, outbox, worker, SendGrid, …) |
+| `adrs/` | ADRs de sistema (001 storage, 002 progresso/`bff`, 003 outbox, 004 checkpoint, 005 SendGrid) |
 | `.cursor/rules/` | Regras obrigatórias para agentes |
 
 ## Fora de escopo

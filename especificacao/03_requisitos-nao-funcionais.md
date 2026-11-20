@@ -8,7 +8,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 
 - **RNF01** — Arquitetura em **microsserviços** (`autenticacao`, `upload`, `processamento-api`, `processamento-worker`, `notificacao` e `bff`).
 - **RNF02** — Dados de domínio **persistidos** (PostgreSQL por serviço dono, conforme ADRs).
-- **RNF03** — Mídia em **object storage multi-tier** (frio para vídeo/frames/zip; quente para thumbs de catálogo — detalhe em ADR de storage).
+- **RNF03** — Mídia em **object storage multi-tier** (frio para vídeo/frames/zip; quente para thumbs de catálogo — [ADR 001](../adrs/001-storage-multi-tier.md)).
 - **RNF04** — Única **API HTTP pública** de produto é o `bff`; demais serviços apenas rede interna. Front estático é superfície pública separada (HTML/JS).
 - **RNF05** — Autenticação com JWT **RS256** e **JWKS**; chave privada só em `autenticacao`.
 - **RNF06** — Superfícies públicas (front e `bff`) expostas apenas via **HTTPS**.
@@ -20,12 +20,12 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RNF09** — Publicação de eventos de integração com **transactional outbox**; consumidores **idempotentes**.
 - **RNF10** — Subscriptions Pub/Sub com **DLQ** após esgotar retries.
 - **RNF11** — Processamento separado em `processamento-api` (consultas HTTP de status/progresso) e `processamento-worker` (FFmpeg, gravação de mídia, checkpoint).
-- **RNF12** — `processamento-worker` com **checkpoint/retomada** (estado de controle + objetos de mídia duráveis), para não perder trabalho em falha de pod.
+- **RNF12** — `processamento-worker` com **checkpoint/retomada** (estado de controle + objetos de mídia duráveis), para não perder trabalho em falha de pod ([ADR 004](../adrs/004-processamento-checkpoint-retomada.md)).
 - **RNF13** — Extração de frames com **FFmpeg** (ou equivalente) em `processamento-worker`.
 
 ### Progresso, download, leitura de mídia e cache
 
-- **RNF14** — Progresso do processamento é **canônico** em `processamento-api` (PostgreSQL). A **projeção de status** para listagem/paginação fica em `upload` (atualizada pelo tópico `processamento-video-atualizado`; em cancelamento, pelo próprio `upload` ao chamar `processamento-api`). O `bff` **não** compartilha esses bancos e pode manter **cache-aside** próprio (ex. Redis) só para leituras de progresso.
+- **RNF14** — Progresso do processamento é **canônico** em `processamento-api` (PostgreSQL). A **projeção de status** para listagem/paginação fica em `upload` (atualizada pelo tópico `processamento-video-atualizado`; em cancelamento, pelo próprio `upload` ao chamar `processamento-api`). O `bff` **não** compartilha esses bancos e mantém **cache-aside** próprio (Redis) só para leituras de progresso ([ADR 002](../adrs/002-progresso-cache-bff.md)).
 - **RNF15** — Download do zip via **URL assinada**, **sem** bucket público; enquanto o zip existir (retenção em [RF23](02_requisitos-funcionais.md)), o dono pode obter URL utilizável. Autorização: [RF17](02_requisitos-funcionais.md).
 - **RNF16** — `processamento-worker` obtém o **vídeo original** apenas via **URL assinada de leitura** emitida por `upload` (tópico `upload-video-atualizado` ou API); sem IAM de leitura direta no bucket de `upload`.
 - **RNF17** — A **remoção do vídeo original** é responsabilidade de `upload`, ao consumir o tópico `processamento-video-atualizado` de conclusão do ciclo (`sucesso`, `falha` ou `cancelado`).
@@ -36,4 +36,4 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RNF19** — Testes automatizados; cobertura unitária ≥ **80%** line+branch por assembly (.NET).
 - **RNF20** — **CI** automático (lint, testes, Sonar); provisionamento/deploy caros na GCP são **manuais** (janela de demo).
 - **RNF21** — Observabilidade com **Datadog** (traces atravessando HTTP e Pub/Sub).
-- **RNF22** — E-mail via **SendGrid**.
+- **RNF22** — E-mail via **SendGrid** ([ADR 005](../adrs/005-sendgrid.md)).
