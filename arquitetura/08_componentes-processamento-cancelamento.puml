@@ -1,46 +1,39 @@
 @startuml 08_componentes-processamento-cancelamento
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-LAYOUT_WITH_LEGEND()
-LAYOUT_TOP_DOWN()
+LAYOUT_LEFT_RIGHT()
+HIDE_STEREOTYPE()
 
 title Processamento — Cancelamento
 
-Container(bff, "BFF Consultas", ".NET", "Solicita cancelamento")
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Cancelamento solicitado")
-ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Status do job")
-ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames")
+Container(bff, "BFF", ".NET", "Solicita cancelamento")
 
 Container_Boundary(procApi, "Processamento API") {
-  Component(apiHttp, "API HTTP", ".NET", "Endpoint de cancelamento")
-  Component(cancel, "Cancelamento", ".NET", "Persiste status e publica evento")
-  Component(outboxA, "Outbox", ".NET", "Publica cancelamento solicitado")
+  Component(apiHttp, "API HTTP", ".NET", "POST cancelar")
+  Component(cancel, "Cancelamento", ".NET", "Status + outbox")
 }
+
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Cancelamento solicitado")
 
 Container_Boundary(procWorker, "Processamento Worker") {
-  Component(consumer, "Consumer", ".NET", "Consome cancelamento; interrompe e limpa")
-  Component(outboxW, "Outbox", ".NET", "Publica cancelamento concluído")
+  Component(consumer, "Consumer", ".NET", "Para o job e limpa frames")
 }
 
-Rel(bff, apiHttp, "Cancelar", "HTTPS")
-Rel(apiHttp, cancel, "Usa")
-Rel(cancel, pgProc, "Status cancelando", "SQL")
-Rel(cancel, outboxA, "Registra evento")
-Rel(outboxA, pgProc, "Outbox", "SQL")
-Rel(outboxA, pubsub, "Publica")
-Rel(pubsub, consumer, "Entrega cancelamento")
-Rel(consumer, pgProc, "Status cancelado", "SQL")
-Rel(consumer, frioProc, "Remove frames", "HTTPS")
-Rel(consumer, outboxW, "Registra evento")
-Rel(outboxW, pgProc, "Outbox", "SQL")
-Rel(outboxW, pubsub, "Publica concluído")
+ContainerDb(pgProc, "Postgres", "PostgreSQL", "Status do job")
+ContainerDb(frioProc, "Frio Processamento", "Object storage", "Frames")
 
-Lay_D(bff, apiHttp)
-Lay_D(apiHttp, cancel)
-Lay_R(cancel, outboxA)
-Lay_D(outboxA, pubsub)
-Lay_R(procApi, procWorker)
-Lay_D(consumer, frioProc)
-Lay_R(consumer, outboxW)
+Rel_R(bff, apiHttp, "Cancelar", "HTTPS")
+Rel_R(apiHttp, cancel, "Usa")
+Rel_R(cancel, pubsub, "Publica")
+Rel_R(pubsub, consumer, "Entrega")
+Rel_D(cancel, pgProc, "cancelando", "SQL")
+Rel_D(consumer, pgProc, "cancelado", "SQL")
+Rel_D(consumer, frioProc, "Remove frames", "HTTPS")
+
+Lay_R(bff, procApi)
+Lay_R(procApi, pubsub)
+Lay_R(pubsub, procWorker)
+Lay_D(procApi, pgProc)
+Lay_D(procWorker, frioProc)
 
 @enduml
