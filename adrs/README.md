@@ -4,9 +4,9 @@ Decisões transversais aos microsserviços. ADRs de implementação local ficam 
 
 | ADR | Tema | Status |
 |-----|------|--------|
-| 001 | Storage multi-tier / `infra-storage` no demo-up/down | Planejado |
-| 002 | Progresso de frames + Redis só no BFF (cache-aside) | Planejado |
-| 003 | Outbox + inbox idempotente | Planejado |
+| 001 | Storage multi-tier / posse de buckets | Planejado |
+| 002 | Progresso de frames + Redis só no bff (cache-aside) | Planejado |
+| [003](003-outbox-inbox.md) | Outbox + inbox idempotente | Aceito |
 | 004 | Worker API split + checkpoint/retomada (Postgres + frio) | Planejado |
 | 005 | Provider de e-mail SendGrid | Planejado |
 

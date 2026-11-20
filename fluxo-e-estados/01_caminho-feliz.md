@@ -2,45 +2,50 @@
 sequenceDiagram
   actor U as Usuário
   participant Web as Front
-  participant BFF as BFF
-  participant Up as Upload
-  participant FrioUp as Storage frio Upload
-  participant Quente as Storage quente Upload
+  participant Bff as bff
+  participant Up as upload
+  participant FrioUp as Storage frio upload
+  participant Quente as Storage quente upload
   participant Bus as Pub/Sub
-  participant Proc as Processamento
-  participant FrioProc as Storage frio Processamento
-  participant Notif as Notificação
+  participant Worker as processamento-worker
+  participant ProcApi as processamento-api
+  participant FrioProc as Storage frio processamento
+  participant Notif as notificacao
+  participant Auth as autenticacao
   participant SG as SendGrid
 
   U->>Web: envia vídeo
-  Web->>BFF: upload (JWT)
-  BFF->>Up: encaminha upload
+  Web->>Bff: upload (JWT)
+  Bff->>Up: encaminha upload
   Up->>Up: triagem OK
+  Up->>Bus: publica tópico upload-video-atualizado (triagem/sucesso)
   Up->>FrioUp: grava vídeo original
   Up->>Up: gera URL assinada de leitura
-  Up->>Bus: publica vídeo persistido + URL de leitura
-  Bus->>Proc: consome enfileiramento
-  Proc->>FrioUp: GET original via URL assinada
+  Up->>Up: status enfileirado
+  Up->>Bus: publica tópico upload-video-atualizado (persistencia/sucesso)
+  Bus->>Worker: consome tópico upload-video-atualizado (persistencia/sucesso)
+  Worker->>FrioUp: GET original via URL assinada
+  Worker->>Bus: publica tópico processamento-video-atualizado (iniciado + frameReadUrl)
+  Bus->>Up: consome tópico processamento-video-atualizado (iniciado); status processando + thumb
+  Up->>Quente: grava thumb
   loop extração de frames
-    Proc->>FrioProc: grava frame
-    Proc->>Bus: publica thumb disponível
-    Bus->>Up: atualiza thumb
-    Up->>Quente: grava/atualiza thumb
+    Worker->>FrioProc: grava frame
   end
-  Proc->>FrioProc: grava zip
-  par limpeza de frames e evento
-    Proc->>FrioProc: remove frames
-    Proc->>Bus: publica sucesso / zip pronto
+  Worker->>FrioProc: grava zip
+  par limpeza e status
+    Worker->>FrioProc: remove frames
+    Worker->>Bus: publica tópico processamento-video-atualizado (sucesso)
   end
-  Bus->>Up: solicita remoção do original
+  Bus->>Up: consome tópico processamento-video-atualizado (sucesso); remove original
   Up->>FrioUp: remove vídeo original
-  Bus->>Notif: consome sucesso
+  Bus->>Notif: consome tópico processamento-video-atualizado (sucesso)
+  Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de sucesso
   SG-->>U: notificação de sucesso
   U->>Web: consulta status / download
-  Web->>BFF: lista / URL (JWT)
-  BFF->>Proc: status + URL assinada do zip
-  BFF->>Up: URL da thumb
-  BFF-->>Web: status + URL
+  Web->>Bff: lista / URL (JWT)
+  Bff->>Up: listagem paginada
+  Bff->>ProcApi: URL assinada do zip
+  Bff-->>Web: status + URL
   Web-->>U: download do zip
 ```

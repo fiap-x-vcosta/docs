@@ -4,38 +4,45 @@
 LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
 
-title Upload — Componentes
+title upload — Componentes
 
-Container(bff, "BFF", ".NET", "Upload / triagem / thumb")
+Container(bff, "bff", ".NET", "Upload / lista / thumb / cancelamento")
+Container(procApi, "processamento-api", ".NET", "POST cancelar")
 
-Container_Boundary(uploadApi, "Upload") {
-  Component(api, "API HTTP", ".NET", "Entrada HTTP e URL de thumb")
+Container_Boundary(uploadApi, "upload") {
+  Component(api, "API HTTP", ".NET", "Upload, listagem, thumb, cancelamento")
   Component(triagem, "Triagem", ".NET", "Formato, tamanho, duração")
-  Component(midia, "Mídia original", ".NET", "Frio + URL assinada de leitura")
+  Component(midia, "Mídia original", ".NET", "Frio + URL assinada")
+  Component(statusProj, "Projeção de status", ".NET", "Status do catálogo")
   Component(outbox, "Outbox", ".NET", "Publicação transacional")
   Component(thumbs, "Thumbs", ".NET", "Quente de catálogo")
 }
 
 ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos")
 
-Container_Boundary(uploadConsumer, "Upload Consumer") {
-  Component(consumer, "Consumer", ".NET", "Thumb e remoção do original")
+Container_Boundary(uploadConsumer, "upload consumer") {
+  Component(consumer, "Consumer", ".NET", "processamento-video-atualizado")
 }
 
-ContainerDb(pg, "Postgres", "PostgreSQL", "Metadados / outbox")
-ContainerDb(frio, "Frio Upload", "Object storage", "Vídeo original")
-ContainerDb(quente, "Quente Upload", "Object storage", "Thumbs")
+ContainerDb(pg, "Postgres upload", "PostgreSQL", "Catálogo / status / outbox")
+ContainerDb(frio, "Frio upload", "Object storage", "Vídeo original")
+ContainerDb(quente, "Quente upload", "Object storage", "Thumbs")
 
 Rel_D(bff, api, "Chama", "HTTPS")
 Rel_D(api, triagem, "Valida")
 Rel_D(triagem, midia, "OK → persiste")
-Rel_D(midia, outbox, "Evento + URL leitura")
-Rel_D(outbox, pubsub, "Publica")
-Rel_D(pubsub, consumer, "Entrega")
-
+Rel_D(midia, statusProj, "Enfileirado")
+Rel_D(statusProj, outbox, "upload-video-atualizado")
+Rel_D(outbox, pubsub, "Publica upload-video-atualizado")
+Rel_D(pubsub, consumer, "Entrega processamento-video-atualizado")
+Rel_R(api, procApi, "Cancelar", "HTTPS")
 Rel_R(api, thumbs, "Serve URL")
-Rel_R(thumbs, quente, "Object I/O", "HTTPS")
+Rel_R(api, statusProj, "Lista / Cancelamento solicitado")
 Rel_R(midia, frio, "Object I/O", "HTTPS")
+Rel_R(thumbs, quente, "Object I/O", "HTTPS")
 Rel_R(outbox, pg, "Outbox", "SQL")
+Rel_R(statusProj, pg, "Status", "SQL")
+Rel_R(consumer, frio, "Remove original", "HTTPS")
+Rel_R(consumer, quente, "Thumb I/O", "HTTPS")
 
 @enduml

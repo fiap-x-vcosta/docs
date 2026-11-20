@@ -4,15 +4,15 @@
 LAYOUT_WITH_LEGEND()
 LAYOUT_TOP_DOWN()
 
-title BFF Consultas — Componentes
+title bff — Componentes
 
 Container(web, "Front", "SPA estática", "Cliente HTTPS")
-Container(auth, "Autenticação", ".NET", "JWKS / login")
-Container(upload, "Upload", ".NET", "Upload, triagem, thumbs")
-Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento, URL do zip")
-ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside")
+Container(auth, "autenticacao", ".NET", "JWKS / login")
+Container(upload, "upload", ".NET", "Upload, listagem, thumbs, status, cancelamento")
+Container(procApi, "processamento-api", ".NET", "Progresso, URL do zip")
+ContainerDb(redis, "Redis bff", "Redis", "Cache-aside de progresso")
 
-Container_Boundary(bff, "BFF Consultas") {
+Container_Boundary(bff, "bff") {
   Component(gateway, "API pública", ".NET", "Única janela HTTP de produto")
   Component(agg, "Agregação", ".NET", "Orquestra auth, upload, processamento e cache")
 }
@@ -20,8 +20,8 @@ Container_Boundary(bff, "BFF Consultas") {
 Rel(web, gateway, "Usa", "HTTPS/JSON")
 Rel(gateway, agg, "Delega")
 Rel(agg, auth, "Login / JWT", "HTTPS")
-Rel(agg, upload, "Upload / triagem / thumb", "HTTPS")
-Rel(agg, procApi, "Progresso / cancelamento / URL zip", "HTTPS")
+Rel(agg, upload, "Upload / lista / thumb / cancelamento", "HTTPS")
+Rel(agg, procApi, "Progresso / URL zip", "HTTPS")
 Rel(agg, redis, "Cache-aside", "TCP")
 
 Lay_D(web, gateway)

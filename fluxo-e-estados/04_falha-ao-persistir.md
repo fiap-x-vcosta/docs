@@ -2,25 +2,29 @@
 sequenceDiagram
   actor U as Usuário
   participant Web as Front
-  participant BFF as BFF
-  participant Up as Upload
-  participant FrioUp as Storage frio Upload
+  participant Bff as bff
+  participant Up as upload
+  participant FrioUp as Storage frio upload
   participant Bus as Pub/Sub
-  participant Notif as Notificação
+  participant Notif as notificacao
+  participant Auth as autenticacao
   participant SG as SendGrid
 
   U->>Web: envia vídeo
-  Web->>BFF: upload (JWT)
-  BFF->>Up: encaminha upload
+  Web->>Bff: upload (JWT)
+  Bff->>Up: encaminha upload
   Up->>Up: triagem OK
+  Up->>Bus: publica tópico upload-video-atualizado (triagem/sucesso)
   Up->>FrioUp: tenta gravar vídeo
   FrioUp-->>Up: falha
-  Up->>Bus: publica falha ao persistir
-  Bus->>Notif: consome
+  Up->>Up: status falha ao persistir
+  Up->>Bus: publica tópico upload-video-atualizado (persistencia/falha)
+  Bus->>Notif: consome tópico upload-video-atualizado (persistencia/falha)
+  Notif->>Auth: e-mail por userId
   Notif->>SG: e-mail de falha com motivo
   SG-->>U: notificação de falha
   U->>Web: consulta histórico
-  Web->>BFF: lista (JWT)
-  BFF->>Up: consulta status
-  BFF-->>Web: falha ao persistir + motivo
+  Web->>Bff: lista paginada (JWT)
+  Bff->>Up: página de vídeos
+  Bff-->>Web: falha ao persistir + motivo
 ```

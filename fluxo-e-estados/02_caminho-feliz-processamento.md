@@ -2,49 +2,49 @@
 sequenceDiagram
   actor U as Usuário
   participant Web as Front
-  participant BFF as BFF
-  participant Redis as Redis BFF
+  participant Bff as bff
+  participant Redis as Redis bff
   participant Bus as Pub/Sub
-  participant Up as Upload
-  participant Quente as Storage quente Upload
-  participant Api as Processamento API
-  participant Worker as Processamento Worker
-  participant PGP as Postgres Processamento
-  participant FrioUp as Storage frio Upload
-  participant FrioProc as Storage frio Processamento
+  participant Up as upload
+  participant Quente as Storage quente upload
+  participant ProcApi as processamento-api
+  participant Worker as processamento-worker
+  participant PGP as Postgres processamento
+  participant FrioUp as Storage frio upload
+  participant FrioProc as Storage frio processamento
 
-  Note over Bus,Worker: evento com URL assinada de leitura (gerada pelo Upload)
-  Bus->>Worker: consome enfileiramento + URL de leitura
+  Note over Bus,Worker: tópico upload-video-atualizado (persistencia/sucesso)
+  Bus->>Worker: consome tópico upload-video-atualizado (persistencia/sucesso)
   Worker->>FrioUp: GET original via URL assinada
   Worker->>PGP: status processando + total estimado + checkpoint
+  Worker->>Bus: publica tópico processamento-video-atualizado (iniciado + frameReadUrl)
+  Bus->>Up: consome tópico processamento-video-atualizado (iniciado); status processando
+  Up->>Quente: grava thumb
 
   loop a cada 30 frames da fonte
     Worker->>Worker: FFmpeg extrai frame
     Worker->>FrioProc: grava frame
-    Worker->>Bus: publica thumb disponível
-    Bus->>Up: atualiza thumb
-    Up->>Quente: grava/atualiza thumb
     Worker->>PGP: progresso N/total + checkpoint
   end
 
-  U->>Web: consulta status (durante processando)
-  Web->>BFF: GET status (JWT)
-  BFF->>Redis: busca progresso em cache
-  alt cache hit
-    Redis-->>BFF: N/total
-  else cache miss
-    BFF->>Api: consulta progresso
-    Api->>PGP: lê progresso canônico
-    PGP-->>Api: N/total + status
-    Api-->>BFF: N/total + status
-    BFF->>Redis: grava cache-aside
+  U->>Web: consulta listagem
+  Web->>Bff: GET lista (JWT, página)
+  Bff->>Up: página de vídeos (projeção de status + thumb)
+  alt item processando
+    Bff->>Redis: busca progresso em cache
+    alt cache miss
+      Bff->>ProcApi: progresso N/total
+      ProcApi->>PGP: lê progresso canônico
+      ProcApi-->>Bff: N/total
+      Bff->>Redis: grava cache-aside
+    end
   end
-  BFF->>Up: URL da thumb
-  BFF-->>Web: processando + progresso + thumb
-  Web-->>U: exibe progresso e thumb
+  Bff-->>Web: itens + status + progresso opcional + thumb
+  Web-->>U: lista
 
   Worker->>FrioProc: grava zip
   Worker->>FrioProc: remove frames
   Worker->>PGP: status sucesso + ref. zip
-  Worker->>Bus: publica sucesso / zip pronto
+  Worker->>Bus: publica tópico processamento-video-atualizado (sucesso)
+  Bus->>Up: consome tópico processamento-video-atualizado (sucesso); remove original
 ```
