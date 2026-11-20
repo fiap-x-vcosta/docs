@@ -1,0 +1,75 @@
+@startuml 02_containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title FIAP X — Containers
+
+Person(usuario, "Usuário", "Usa a plataforma via browser")
+
+System_Boundary(fiapx, "FIAP X") {
+  Container(web, "Front", "SPA estática", "Upload, listagem, progresso, download")
+  Container(bff, "BFF Consultas", ".NET", "Única API HTTP pública de produto")
+  Container(auth, "Autenticação", ".NET", "Conta, login, JWT RS256 e JWKS")
+  Container(upload, "Upload", ".NET", "Triagem, frio do original, URL assinada de leitura")
+  Container(procApi, "Processamento API", ".NET", "Status, progresso e cancelamento")
+  Container(procWorker, "Processamento Worker", ".NET + FFmpeg", "Extração, zip, checkpoint, thumbs")
+  Container(notif, "Notificação", ".NET", "Consome eventos e envia e-mail")
+}
+
+ContainerDb(pgAuth, "Postgres Autenticação", "PostgreSQL", "Usuários e credenciais")
+ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados de upload/triagem")
+ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Job, progresso canônico, checkpoint")
+ContainerDb(pgNotif, "Postgres Notificação", "PostgreSQL", "Outbox de e-mail")
+ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de leituras")
+ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
+ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames e zip")
+ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Tópicos de domínio + DLQ")
+System_Ext(sendgrid, "SendGrid", "E-mail")
+
+Rel(usuario, web, "Usa", "HTTPS")
+Rel(web, bff, "API de produto", "HTTPS/JSON")
+Rel(bff, auth, "Login, JWKS", "HTTPS")
+Rel(bff, upload, "Upload / triagem", "HTTPS")
+Rel(bff, procApi, "Status / progresso / cancelamento", "HTTPS")
+Rel(bff, redis, "Cache-aside", "TCP")
+Rel(bff, frioProc, "URL assinada do zip", "HTTPS")
+Rel(bff, quente, "URL da thumb", "HTTPS")
+
+Rel(auth, pgAuth, "Lê/escreve", "SQL")
+Rel(upload, pgUpload, "Lê/escreve", "SQL")
+Rel(upload, frioUp, "Grava/remove original", "HTTPS")
+Rel(upload, pubsub, "Publica + URL de leitura")
+
+Rel(procApi, pgProc, "Lê/escreve", "SQL")
+Rel(procWorker, pgProc, "Checkpoint / progresso", "SQL")
+Rel(procWorker, pubsub, "Consome/publica")
+Rel(procWorker, frioUp, "GET via URL assinada", "HTTPS")
+Rel(procWorker, frioProc, "Frames e zip", "HTTPS")
+Rel(procWorker, quente, "Thumbs", "HTTPS")
+
+Rel(notif, pgNotif, "Outbox", "SQL")
+Rel(notif, pubsub, "Consome")
+Rel(notif, sendgrid, "Envia e-mail", "HTTPS")
+
+Lay_D(web, bff)
+Lay_D(bff, auth)
+Lay_R(auth, upload)
+Lay_R(upload, procApi)
+Lay_R(procApi, procWorker)
+Lay_R(procWorker, notif)
+
+Lay_D(auth, pgAuth)
+Lay_D(upload, pgUpload)
+Lay_D(procApi, pgProc)
+Lay_D(notif, pgNotif)
+Lay_R(pgUpload, frioUp)
+Lay_R(pgProc, frioProc)
+Lay_R(frioProc, quente)
+Lay_R(pgNotif, pubsub)
+Lay_R(pubsub, sendgrid)
+Lay_R(bff, redis)
+
+@enduml

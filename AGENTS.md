@@ -21,7 +21,7 @@ Documentação transversal do sistema de processamento de vídeos **FIAP X**. Or
 | `dominio/` | Modelo de dados |
 | `event-storming/` | Board Miro (jpg) + transcrição Markdown canônica (ver regra `event-storming-artifacts`) |
 | `fluxo-e-estados/` | Fluxos e estados |
-| `arquitetura/` | C4 (`01_`… Mermaid) |
+| `arquitetura/` | C4 (`01_`… PlantUML + SVG; ver regra `arquitetura-c4-artifacts`) |
 | `eventos/` | Catálogo de eventos |
 | `adrs/` | ADRs de sistema (storage, progresso/Redis, outbox, worker, SendGrid, …) |
 | `.cursor/rules/` | Regras obrigatórias para agentes |

@@ -1,0 +1,11 @@
+---
+description: Arquitetura C4 — PlantUML fonte; SVG render versionado
+alwaysApply: true
+---
+
+# Artefatos de arquitetura (C4)
+
+- Em `arquitetura/`, a **fonte** dos diagramas C4 são os `.puml` (C4-PlantUML, sprites oficiais).
+- Os `.svg` são o **render versionado** para leitura no GitHub; regenerar via Docker (comando no `arquitetura/README.md`).
+- Os `.md` numerados **só embutem** o SVG correspondente (`![…](01_….svg)`).
+- Pares: `01_contexto.puml` ↔ `01_contexto.svg` ↔ `01_contexto.md`, e assim por diante.
