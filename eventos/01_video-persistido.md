@@ -20,6 +20,3 @@
   }
 }
 ```
-
-- `signedReadUrl` — URL assinada de leitura do original ([RNF16](../especificacao/03_requisitos-nao-funcionais.md))
-- **Idempotência:** `eventId`; Worker ignora reentrega se o job do `videoId` já existir ou já tiver sido iniciado a partir do mesmo `eventId`

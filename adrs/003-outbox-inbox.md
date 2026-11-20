@@ -13,7 +13,7 @@ O problema a ser resolvido é: **Como garantir publicação confiável pós-comm
 ## 2. Decisão
 
 - **Transactional outbox** no PostgreSQL do serviço publicador: na mesma transação do estado de domínio, inserir a linha de outbox com o envelope do [catálogo de eventos](../eventos/catalogo-de-eventos.md) (`eventId`, `type`, `version`, `occurredAt`, `data`).
-- **Relay** (hosted service do próprio serviço) lê outbox pendente, publica no tópico Pub/Sub cujo nome é o `type`, e marca a linha como publicada (ou remove). Falha de publish mantém a linha para retry.
+- **Relay** (hosted service do próprio serviço) lê outbox pendente, publica no tópico Pub/Sub cujo nome é o `type`, e **marca a linha como publicada** (não remove). Falha de publish mantém a linha pendente para retry.
 - **Inbox** no PostgreSQL de cada consumidor: antes de aplicar o efeito, gravar `eventId` (unique). Se já existir, ack sem reaplicar. Efeito transacional + inbox na mesma transação; para I/O externo (object storage, SendGrid), ação idempotente e inbox após sucesso.
 - **Subscriptions** com retry e **DLQ** após esgotar tentativas ([RNF10](../especificacao/03_requisitos-nao-funcionais.md)).
 - Publicadores e consumidores **não** compartilham tabelas de outbox/inbox entre serviços.

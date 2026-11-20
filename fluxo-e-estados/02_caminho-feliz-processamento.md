@@ -46,5 +46,7 @@ sequenceDiagram
   Worker->>FrioProc: grava zip
   Worker->>FrioProc: remove frames
   Worker->>PGP: status sucesso + ref. zip
-  Worker->>Bus: publica sucesso / zip pronto
+  Worker->>Bus: publica processamento-sucesso
+  Worker->>Bus: publica notificacao-solicitada (sucesso)
 ```
+

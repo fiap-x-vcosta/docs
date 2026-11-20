@@ -1,4 +1,4 @@
-# 08 — `processamento-cancelado`
+# 07 — `processamento-cancelado`
 
 - **Tópico:** `processamento-cancelado`
 - **Publicador:** Processamento (Worker)
@@ -19,6 +19,3 @@
   }
 }
 ```
-
-- **Efeitos:** Upload remove original e thumb; **sem** e-mail ([RF13](../especificacao/02_requisitos-funcionais.md))
-- **Idempotência:** `eventId`

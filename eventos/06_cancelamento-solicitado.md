@@ -1,4 +1,4 @@
-# 07 — `cancelamento-solicitado`
+# 06 — `cancelamento-solicitado`
 
 - **Tópico:** `cancelamento-solicitado`
 - **Publicador:** Processamento (API)
@@ -20,5 +20,3 @@
   }
 }
 ```
-
-- **Idempotência:** `eventId`; Worker no-op se o job já estiver `cancelado`, `sucesso` ou `falha`

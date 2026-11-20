@@ -28,13 +28,14 @@ sequenceDiagram
     Up->>Quente: grava/atualiza thumb
   end
   Proc->>FrioProc: grava zip
-  par limpeza de frames e evento
+  par limpeza de frames e eventos
     Proc->>FrioProc: remove frames
-    Proc->>Bus: publica sucesso / zip pronto
+    Proc->>Bus: publica processamento-sucesso
+    Proc->>Bus: publica notificacao-solicitada (sucesso)
   end
   Bus->>Up: solicita remoção do original
   Up->>FrioUp: remove vídeo original
-  Bus->>Notif: consome sucesso
+  Bus->>Notif: consome notificacao-solicitada
   Notif->>SG: e-mail de sucesso
   SG-->>U: notificação de sucesso
   U->>Web: consulta status / download

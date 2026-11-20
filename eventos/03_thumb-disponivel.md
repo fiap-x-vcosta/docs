@@ -1,4 +1,4 @@
-# 04 — `thumb-disponivel`
+# 03 — `thumb-disponivel`
 
 - **Tópico:** `thumb-disponivel`
 - **Publicador:** Processamento (Worker)
@@ -19,6 +19,3 @@
   }
 }
 ```
-
-- `frameReadUrl` — URL assinada de leitura do frame no frio do Processamento
-- **Idempotência:** `eventId`; Upload pode substituir a thumb do `videoId` (última escrita vence)
