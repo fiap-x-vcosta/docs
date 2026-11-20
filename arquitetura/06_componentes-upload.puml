@@ -1,4 +1,4 @@
-@startuml 03_componentes-upload
+@startuml 06_componentes-upload
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
@@ -7,9 +7,9 @@ LAYOUT_TOP_DOWN()
 title Upload — Componentes
 
 Container(bff, "BFF Consultas", ".NET", "Encaminha upload e consultas")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio")
 ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados e outbox")
 ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio")
 
 Container_Boundary(upload, "Upload") {
   Component(api, "API HTTP", ".NET", "Endpoints internos de upload/triagem/status")
@@ -28,11 +28,13 @@ Rel(midia, pgUpload, "Metadados", "SQL")
 Rel(outbox, pgUpload, "Outbox", "SQL")
 Rel(outbox, pubsub, "Publica")
 
+Lay_D(bff, api)
 Lay_R(triagem, midia)
 Lay_R(midia, outbox)
 Lay_D(api, triagem)
+Lay_D(outbox, pubsub)
 Lay_D(triagem, pgUpload)
 Lay_D(midia, frioUp)
-Lay_R(pgUpload, pubsub)
+Lay_R(pubsub, pgUpload)
 
 @enduml

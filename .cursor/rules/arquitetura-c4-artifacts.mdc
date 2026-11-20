@@ -7,5 +7,5 @@ alwaysApply: true
 
 - Em `arquitetura/`, a **fonte** dos diagramas C4 são os `.puml` (C4-PlantUML, sprites oficiais).
 - Os `.svg` são o **render versionado** para leitura no GitHub; regenerar via Docker (comando no `arquitetura/README.md`).
-- Os `.md` numerados **só embutem** o SVG correspondente (`![…](01_….svg)`).
-- Pares: `01_contexto.puml` ↔ `01_contexto.svg` ↔ `01_contexto.md`, e assim por diante.
+- **Não** versionar `.md` por diagrama — o índice está em `arquitetura/README.md`.
+- Pares: `NN_nome.puml` ↔ `NN_nome.svg`.

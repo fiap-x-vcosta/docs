@@ -1,0 +1,25 @@
+@startuml 03_containers-upload
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title FIAP X — Containers (Upload)
+
+Container(bff, "BFF Consultas", ".NET", "Encaminha upload e consultas de triagem")
+Container(upload, "Upload", ".NET", "Triagem, frio do original, URL assinada de leitura")
+ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados de upload/triagem")
+ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio + DLQ")
+
+Rel(bff, upload, "Upload / triagem", "HTTPS")
+Rel(upload, pgUpload, "Lê/escreve", "SQL")
+Rel(upload, frioUp, "Grava/remove original", "HTTPS")
+Rel(upload, pubsub, "Publica + URL de leitura")
+
+Lay_D(bff, upload)
+Lay_D(upload, pgUpload)
+Lay_R(pgUpload, frioUp)
+Lay_R(frioUp, pubsub)
+
+@enduml

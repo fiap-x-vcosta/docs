@@ -1,0 +1,34 @@
+@startuml 07_componentes-processamento-consulta
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title Processamento — Consulta de progresso
+
+Container(bff, "BFF Consultas", ".NET", "Consulta progresso com cache-aside")
+ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de progresso")
+ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Progresso canônico")
+ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
+
+Container_Boundary(procApi, "Processamento API") {
+  Component(apiHttp, "API HTTP", ".NET", "Status e progresso")
+  Component(consulta, "Consulta progresso", ".NET", "Lê progresso canônico")
+  Component(thumbs, "Thumbs", ".NET", "Resolve URL da thumb no quente")
+}
+
+Rel(bff, redis, "Cache-aside", "TCP")
+Rel(bff, apiHttp, "Consulta progresso / thumb", "HTTPS")
+Rel(apiHttp, consulta, "Usa")
+Rel(consulta, pgProc, "Lê", "SQL")
+Rel(apiHttp, thumbs, "Usa")
+Rel(thumbs, quente, "URL thumb", "HTTPS")
+
+Lay_D(bff, redis)
+Lay_R(bff, apiHttp)
+Lay_D(apiHttp, consulta)
+Lay_R(consulta, thumbs)
+Lay_D(consulta, pgProc)
+Lay_D(thumbs, quente)
+
+@enduml

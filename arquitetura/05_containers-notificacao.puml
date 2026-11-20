@@ -1,0 +1,22 @@
+@startuml 05_containers-notificacao
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
+
+title FIAP X — Containers (Notificação)
+
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de sucesso/falha")
+Container(notif, "Notificação", ".NET", "Consome eventos e envia e-mail")
+ContainerDb(pgNotif, "Postgres Notificação", "PostgreSQL", "Outbox de e-mail")
+System_Ext(sendgrid, "SendGrid", "E-mail")
+
+Rel(pubsub, notif, "Entrega evento")
+Rel(notif, pgNotif, "Outbox", "SQL")
+Rel(notif, sendgrid, "Envia e-mail", "HTTPS")
+
+Lay_R(pubsub, notif)
+Lay_R(notif, sendgrid)
+Lay_D(notif, pgNotif)
+
+@enduml

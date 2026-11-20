@@ -1,0 +1,32 @@
+@startuml 02_containers-publico
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title FIAP X — Containers (borda pública)
+
+Person(usuario, "Usuário", "Usa a plataforma via browser")
+
+System_Boundary(fiapx, "FIAP X") {
+  Container(web, "Front", "SPA estática", "Upload, listagem, progresso, download")
+  Container(bff, "BFF Consultas", ".NET", "Única API HTTP pública de produto")
+  Container(auth, "Autenticação", ".NET", "Conta, login, JWT RS256 e JWKS")
+}
+
+ContainerDb(pgAuth, "Postgres Autenticação", "PostgreSQL", "Usuários e credenciais")
+ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de leituras")
+
+Rel(usuario, web, "Usa", "HTTPS")
+Rel(web, bff, "API de produto", "HTTPS/JSON")
+Rel(bff, auth, "Login, JWKS", "HTTPS")
+Rel(bff, redis, "Cache-aside", "TCP")
+Rel(auth, pgAuth, "Lê/escreve", "SQL")
+
+Lay_D(usuario, web)
+Lay_D(web, bff)
+Lay_R(bff, auth)
+Lay_D(auth, pgAuth)
+Lay_R(bff, redis)
+
+@enduml

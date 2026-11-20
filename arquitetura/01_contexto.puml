@@ -12,5 +12,6 @@ System_Ext(sendgrid, "SendGrid", "Entrega e-mails de sucesso e falha")
 
 Rel(usuario, fiapx, "Usa", "HTTPS")
 Rel(fiapx, sendgrid, "Envia e-mail", "HTTPS")
+Rel_Back(usuario, sendgrid, "Envia e-mails para")
 
 @enduml

@@ -1,0 +1,44 @@
+@startuml 08_componentes-processamento-cancelamento
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title Processamento — Cancelamento
+
+Container(bff, "BFF Consultas", ".NET", "Solicita cancelamento")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Evento de cancelamento")
+ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Sinal e status do job")
+ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames")
+ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
+
+Container_Boundary(procApi, "Processamento API") {
+  Component(apiHttp, "API HTTP", ".NET", "Endpoint de cancelamento")
+  Component(cancel, "Cancelamento", ".NET", "Sinaliza job em andamento")
+}
+
+Container_Boundary(procWorker, "Processamento Worker") {
+  Component(consumer, "Consumer", ".NET", "Interrompe job; limpa mídia")
+  Component(outboxW, "Outbox", ".NET", "Publica cancelamento")
+}
+
+Rel(bff, apiHttp, "Cancelar", "HTTPS")
+Rel(apiHttp, cancel, "Usa")
+Rel(cancel, pgProc, "Escreve sinal", "SQL")
+Rel(cancel, consumer, "Interrompe job")
+Rel(consumer, frioProc, "Remove frames", "HTTPS")
+Rel(consumer, quente, "Remove thumb", "HTTPS")
+Rel(consumer, outboxW, "Registra evento")
+Rel(outboxW, pgProc, "Outbox", "SQL")
+Rel(outboxW, pubsub, "Publica")
+
+Lay_D(bff, apiHttp)
+Lay_D(apiHttp, cancel)
+Lay_R(procApi, procWorker)
+Lay_D(cancel, pgProc)
+Lay_D(consumer, frioProc)
+Lay_R(frioProc, quente)
+Lay_R(consumer, outboxW)
+Lay_D(outboxW, pubsub)
+
+@enduml
