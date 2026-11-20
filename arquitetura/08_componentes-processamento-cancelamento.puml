@@ -1,7 +1,7 @@
 @startuml 08_componentes-processamento-cancelamento
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-LAYOUT_LEFT_RIGHT()
+LAYOUT_TOP_DOWN()
 HIDE_STEREOTYPE()
 
 title Processamento — Cancelamento
@@ -22,18 +22,12 @@ Container_Boundary(procWorker, "Processamento Worker") {
 ContainerDb(pgProc, "Postgres", "PostgreSQL", "Status do job")
 ContainerDb(frioProc, "Frio Processamento", "Object storage", "Frames")
 
-Rel_R(bff, apiHttp, "Cancelar", "HTTPS")
-Rel_R(apiHttp, cancel, "Usa")
-Rel_R(cancel, pubsub, "Publica")
-Rel_R(pubsub, consumer, "Entrega")
-Rel_D(cancel, pgProc, "cancelando", "SQL")
-Rel_D(consumer, pgProc, "cancelado", "SQL")
-Rel_D(consumer, frioProc, "Remove frames", "HTTPS")
-
-Lay_R(bff, procApi)
-Lay_R(procApi, pubsub)
-Lay_R(pubsub, procWorker)
-Lay_D(procApi, pgProc)
-Lay_D(procWorker, frioProc)
+Rel_D(bff, apiHttp, "Cancelar", "HTTPS")
+Rel_D(apiHttp, cancel, "Usa")
+Rel_D(cancel, pubsub, "Publica")
+Rel_D(pubsub, consumer, "Entrega")
+Rel_R(cancel, pgProc, "cancelando", "SQL")
+Rel_R(consumer, frioProc, "Remove frames", "HTTPS")
+Rel_R(consumer, pgProc, "cancelado", "SQL")
 
 @enduml
