@@ -12,20 +12,28 @@ ContainerDb(redis, "Redis bff", "Redis", "Cache-aside de progresso")
 ContainerDb(pgProc, "Postgres processamento", "PostgreSQL", "Progresso canônico")
 
 Container_Boundary(procApi, "processamento-api") {
-  Component(apiHttp, "API HTTP", ".NET", "Progresso e URL do zip")
+  Component(apiHttp, "API HTTP", ".NET", "Progresso, URL zip, frame para thumb")
   Component(consulta, "Consulta progresso", ".NET", "Lê progresso canônico")
+  Component(frameThumb, "Frame para thumb", ".NET", "Qualquer frame válido no frio")
 }
+
+ContainerDb(frioProc, "Frio processamento", "Object storage", "Frames")
 
 Rel(bff, upload, "Listagem paginada / thumb", "HTTPS")
 Rel(bff, redis, "Cache-aside", "TCP")
 Rel(bff, apiHttp, "Progresso / URL zip", "HTTPS")
+Rel(upload, apiHttp, "GET frame (thumb)", "HTTPS")
 Rel(apiHttp, consulta, "Usa")
+Rel(apiHttp, frameThumb, "Usa")
 Rel(consulta, pgProc, "Lê", "SQL")
+Rel(frameThumb, frioProc, "Lê frame", "HTTPS")
 
 Lay_D(bff, redis)
 Lay_R(bff, upload)
 Lay_R(bff, apiHttp)
 Lay_D(apiHttp, consulta)
 Lay_D(consulta, pgProc)
+Lay_R(apiHttp, frameThumb)
+Lay_D(frameThumb, frioProc)
 
 @enduml

@@ -39,8 +39,7 @@
   "data": {
     "videoId": "uuid",
     "userId": "uuid",
-    "status": "iniciado",
-    "frameReadUrl": "string"
+    "status": "iniciado"
   }
 }
 ```

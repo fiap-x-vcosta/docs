@@ -12,7 +12,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RNF04** — Única **API HTTP pública** de produto é o `bff`; demais serviços apenas rede interna. Front estático é superfície pública separada (HTML/JS).
 - **RNF05** — Autenticação com JWT **RS256** e **JWKS**; chave privada só em `autenticacao`.
 - **RNF06** — Superfícies públicas (front e `bff`) expostas apenas via **HTTPS**.
-- **RNF07** — **Posse de object storage por domínio:** `upload` possui frio do **vídeo original** e quente das **thumbs** de catálogo; `processamento-worker` possui frio de **frames/zip**. Sem escrita ou exclusão cross-domínio (thumbs chegam a `upload` via tópico `processamento-video-atualizado` / `iniciado`).
+- **RNF07** — **Posse de object storage por domínio:** `upload` possui frio do **vídeo original** e quente das **thumbs** de catálogo; `processamento-worker` possui frio de **frames/zip**. Sem escrita ou exclusão cross-domínio. Thumb: `upload` consome `iniciado` e obtém o frame via GET autenticado em `processamento-api` ([ADR 001](../adrs/001-storage-multi-tier.md)).
 
 ### Mensageria e resiliência
 

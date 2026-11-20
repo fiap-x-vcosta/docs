@@ -26,7 +26,7 @@ Glossário: [linguagem onipresente](01_linguagem-onipresente.md).
 - **RF12** — Em **falha** no processamento, o sistema registra o **motivo da falha** e envia **notificação de falha** por e-mail **com o motivo**.
 - **RF13** — O usuário pode **cancelar** somente enquanto o status for **enfileirado** ou **processando**; após cancelamento solicitado, sucesso, falha, cancelado, rejeitado na triagem ou falha ao persistir, o cancelamento **não** é permitido. Cancelamento **não** envia e-mail.
 - **RF14** — A listagem/histórico do usuário é paginada a partir de `upload` (projeção de status) e inclui **todos os status** do ciclo ([status do video na listagem](01_linguagem-onipresente.md#status-do-video-na-listagem)); com progresso quando `processando` (consulta a `processamento-api`) e **motivo** nos status de rejeição/falha.
-- **RF15** — Durante **processando**, a listagem exibe **thumb** quando `upload` já tiver gravado a miniatura a partir do tópico `processamento-video-atualizado` (`iniciado`).
+- **RF15** — Durante **processando**, a listagem exibe **thumb** quando `upload`, ao consumir `processamento-video-atualizado` (`iniciado`), obtém um frame via GET em `processamento-api` e grava a miniatura no quente.
 - **RF16** — Após sucesso (URL gerada), o sistema envia **notificação de sucesso** por e-mail.
 - **RF17** — **Somente o usuário que enviou** o vídeo (dono) pode obter a URL de download e baixar o `.zip` desse vídeo.
 - **RF18** — O download do resultado é feito a partir da **URL de download** gerada pelo sistema (assinada; [RNF15](03_requisitos-nao-funcionais.md)).

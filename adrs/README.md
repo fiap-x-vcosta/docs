@@ -4,7 +4,7 @@ Decisões transversais aos microsserviços. ADRs de implementação local ficam 
 
 | ADR | Tema | Status |
 |-----|------|--------|
-| [001](001-storage-multi-tier.md) | Storage multi-tier / posse de buckets / demo-up | Aceito |
+| [001](001-storage-multi-tier.md) | Storage multi-tier / posse de buckets (Standard na demo) | Aceito |
 | [002](002-progresso-cache-bff.md) | Progresso canônico + Redis só no `bff` (cache-aside) | Aceito |
 | [003](003-outbox-inbox.md) | Outbox + inbox idempotente | Aceito |
 | [004](004-processamento-checkpoint-retomada.md) | Split `processamento-api`/`processamento-worker` + checkpoint/retomada | Aceito |
