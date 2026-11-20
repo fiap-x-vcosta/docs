@@ -7,38 +7,40 @@ LAYOUT_TOP_DOWN()
 title Processamento — Cancelamento
 
 Container(bff, "BFF Consultas", ".NET", "Solicita cancelamento")
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Evento de cancelamento")
-ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Sinal e status do job")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Cancelamento solicitado")
+ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Status do job")
 ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames")
-ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
 
 Container_Boundary(procApi, "Processamento API") {
   Component(apiHttp, "API HTTP", ".NET", "Endpoint de cancelamento")
-  Component(cancel, "Cancelamento", ".NET", "Sinaliza job em andamento")
+  Component(cancel, "Cancelamento", ".NET", "Persiste status e publica evento")
+  Component(outboxA, "Outbox", ".NET", "Publica cancelamento solicitado")
 }
 
 Container_Boundary(procWorker, "Processamento Worker") {
-  Component(consumer, "Consumer", ".NET", "Interrompe job; limpa mídia")
-  Component(outboxW, "Outbox", ".NET", "Publica cancelamento")
+  Component(consumer, "Consumer", ".NET", "Consome cancelamento; interrompe e limpa")
+  Component(outboxW, "Outbox", ".NET", "Publica cancelamento concluído")
 }
 
 Rel(bff, apiHttp, "Cancelar", "HTTPS")
 Rel(apiHttp, cancel, "Usa")
-Rel(cancel, pgProc, "Escreve sinal", "SQL")
-Rel(cancel, consumer, "Interrompe job")
+Rel(cancel, pgProc, "Status cancelando", "SQL")
+Rel(cancel, outboxA, "Registra evento")
+Rel(outboxA, pgProc, "Outbox", "SQL")
+Rel(outboxA, pubsub, "Publica")
+Rel(pubsub, consumer, "Entrega cancelamento")
+Rel(consumer, pgProc, "Status cancelado", "SQL")
 Rel(consumer, frioProc, "Remove frames", "HTTPS")
-Rel(consumer, quente, "Remove thumb", "HTTPS")
 Rel(consumer, outboxW, "Registra evento")
 Rel(outboxW, pgProc, "Outbox", "SQL")
-Rel(outboxW, pubsub, "Publica")
+Rel(outboxW, pubsub, "Publica concluído")
 
 Lay_D(bff, apiHttp)
 Lay_D(apiHttp, cancel)
+Lay_R(cancel, outboxA)
+Lay_D(outboxA, pubsub)
 Lay_R(procApi, procWorker)
-Lay_D(cancel, pgProc)
 Lay_D(consumer, frioProc)
-Lay_R(frioProc, quente)
 Lay_R(consumer, outboxW)
-Lay_D(outboxW, pubsub)
 
 @enduml

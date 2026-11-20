@@ -6,26 +6,23 @@ LAYOUT_TOP_DOWN()
 
 title FIAP X — Containers (Processamento)
 
-Container(bff, "BFF Consultas", ".NET", "Status, progresso, cancelamento, URLs")
+Container(bff, "BFF Consultas", ".NET", "Status, progresso, cancelamento, URL do zip")
 Container(procApi, "Processamento API", ".NET", "Status, progresso e cancelamento")
-Container(procWorker, "Processamento Worker", ".NET + FFmpeg", "Extração, zip, checkpoint, thumbs")
+Container(procWorker, "Processamento Worker", ".NET + FFmpeg", "Extração, zip, checkpoint")
 ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Job, progresso canônico, checkpoint")
 ContainerDb(frioProc, "Storage frio Processamento", "Object storage", "Frames e zip")
-ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
-ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Enfileiramento e conclusão")
+ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Enfileiramento, conclusão, cancelamento")
 
-Rel(bff, procApi, "Status / progresso / cancelamento / URLs", "HTTPS")
+Rel(bff, procApi, "Status / progresso / cancelamento / URL zip", "HTTPS")
 Rel(procApi, pgProc, "Lê/escreve", "SQL")
 Rel(procWorker, pgProc, "Checkpoint / progresso", "SQL")
 Rel(procWorker, pubsub, "Consome/publica")
 Rel(procWorker, frioProc, "Frames e zip", "HTTPS")
-Rel(procWorker, quente, "Thumbs", "HTTPS")
 
 Lay_D(bff, procApi)
 Lay_R(procApi, procWorker)
 Lay_D(procApi, pgProc)
 Lay_D(procWorker, frioProc)
-Lay_R(frioProc, quente)
 Lay_R(procWorker, pubsub)
 
 @enduml

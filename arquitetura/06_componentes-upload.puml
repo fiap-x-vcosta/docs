@@ -6,35 +6,46 @@ LAYOUT_TOP_DOWN()
 
 title Upload — Componentes
 
-Container(bff, "BFF Consultas", ".NET", "Encaminha upload e consultas")
+Container(bff, "BFF Consultas", ".NET", "Encaminha upload, triagem e thumbs")
 ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio")
 ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados e outbox")
 ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
+ContainerDb(quente, "Storage quente Upload", "Object storage", "Thumbs")
 
 Container_Boundary(upload, "Upload") {
-  Component(api, "API HTTP", ".NET", "Endpoints internos de upload/triagem/status")
+  Component(api, "API HTTP", ".NET", "Upload, triagem, status e URL de thumb")
   Component(triagem, "Triagem", ".NET", "Valida formato, tamanho e duração")
   Component(midia, "Mídia original", ".NET", "Grava/remove original; emite URL assinada de leitura")
+  Component(thumbs, "Thumbs", ".NET", "Persiste thumb de catálogo no quente")
   Component(outbox, "Outbox", ".NET", "Publicação transacional de eventos")
+  Component(consumer, "Consumer", ".NET", "Consome thumb/remoção do Processamento")
 }
 
 Rel(bff, api, "Chama", "HTTPS")
 Rel(api, triagem, "Valida")
 Rel(api, midia, "Persiste ou remove")
+Rel(api, thumbs, "Serve URL")
 Rel(api, outbox, "Registra evento")
 Rel(triagem, pgUpload, "Lê/escreve", "SQL")
 Rel(midia, frioUp, "Object I/O", "HTTPS")
 Rel(midia, pgUpload, "Metadados", "SQL")
+Rel(thumbs, quente, "Object I/O", "HTTPS")
+Rel(thumbs, pgUpload, "Metadados", "SQL")
 Rel(outbox, pgUpload, "Outbox", "SQL")
 Rel(outbox, pubsub, "Publica")
+Rel(pubsub, consumer, "Entrega")
+Rel(consumer, thumbs, "Atualiza thumb")
+Rel(consumer, midia, "Remove original")
 
 Lay_D(bff, api)
 Lay_R(triagem, midia)
-Lay_R(midia, outbox)
+Lay_R(midia, thumbs)
+Lay_R(thumbs, outbox)
 Lay_D(api, triagem)
 Lay_D(outbox, pubsub)
 Lay_D(triagem, pgUpload)
 Lay_D(midia, frioUp)
-Lay_R(pubsub, pgUpload)
+Lay_D(thumbs, quente)
+Lay_R(pubsub, consumer)
 
 @enduml

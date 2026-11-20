@@ -6,20 +6,24 @@ LAYOUT_TOP_DOWN()
 
 title FIAP X — Containers (Upload)
 
-Container(bff, "BFF Consultas", ".NET", "Encaminha upload e consultas de triagem")
-Container(upload, "Upload", ".NET", "Triagem, frio do original, URL assinada de leitura")
+Container(bff, "BFF Consultas", ".NET", "Encaminha upload, triagem e thumbs")
+Container(upload, "Upload", ".NET", "Triagem, original, thumbs de catálogo")
 ContainerDb(pgUpload, "Postgres Upload", "PostgreSQL", "Metadados de upload/triagem")
 ContainerDb(frioUp, "Storage frio Upload", "Object storage", "Vídeo original")
+ContainerDb(quente, "Storage quente Upload", "Object storage", "Thumbs de listagem")
 ContainerQueue(pubsub, "Pub/Sub", "Mensageria", "Eventos de domínio + DLQ")
 
-Rel(bff, upload, "Upload / triagem", "HTTPS")
+Rel(bff, upload, "Upload / triagem / thumb", "HTTPS")
 Rel(upload, pgUpload, "Lê/escreve", "SQL")
 Rel(upload, frioUp, "Grava/remove original", "HTTPS")
+Rel(upload, quente, "Grava/serve thumbs", "HTTPS")
 Rel(upload, pubsub, "Publica + URL de leitura")
+Rel(pubsub, upload, "Consome thumb / remoção")
 
 Lay_D(bff, upload)
 Lay_D(upload, pgUpload)
 Lay_R(pgUpload, frioUp)
-Lay_R(frioUp, pubsub)
+Lay_R(frioUp, quente)
+Lay_R(quente, pubsub)
 
 @enduml

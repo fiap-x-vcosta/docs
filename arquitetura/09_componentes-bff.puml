@@ -8,38 +8,27 @@ title BFF Consultas — Componentes
 
 Container(web, "Front", "SPA estática", "Cliente HTTPS")
 Container(auth, "Autenticação", ".NET", "JWKS / login")
-Container(upload, "Upload", ".NET", "Upload e status de triagem")
-Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento, URLs de mídia")
+Container(upload, "Upload", ".NET", "Upload, triagem, thumbs")
+Container(procApi, "Processamento API", ".NET", "Status, progresso, cancelamento, URL do zip")
 ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside")
 
 Container_Boundary(bff, "BFF Consultas") {
   Component(gateway, "API pública", ".NET", "Única janela HTTP de produto")
-  Component(agg, "Agregação", ".NET", "Orquestra chamadas internas")
-  Component(cache, "Cache progresso", ".NET", "Cache-aside de leituras")
-  Component(download, "Download", ".NET", "Pede URL assinada do zip ao Processamento")
-  Component(thumbs, "Thumbs", ".NET", "Pede URL da thumb ao Processamento")
+  Component(agg, "Agregação", ".NET", "Orquestra auth, upload, processamento e cache")
 }
 
 Rel(web, gateway, "Usa", "HTTPS/JSON")
-Rel(gateway, auth, "Valida JWT", "HTTPS")
 Rel(gateway, agg, "Delega")
-Rel(agg, upload, "Upload/triagem", "HTTPS")
-Rel(agg, procApi, "Processamento", "HTTPS")
-Rel(agg, cache, "Lê progresso")
-Rel(cache, redis, "Get/Set", "TCP")
-Rel(cache, procApi, "Miss → origem", "HTTPS")
-Rel(agg, download, "Pede URL do zip")
-Rel(download, procApi, "URL assinada", "HTTPS")
-Rel(agg, thumbs, "Pede URL da thumb")
-Rel(thumbs, procApi, "URL thumb", "HTTPS")
+Rel(agg, auth, "Login / JWT", "HTTPS")
+Rel(agg, upload, "Upload / triagem / thumb", "HTTPS")
+Rel(agg, procApi, "Progresso / cancelamento / URL zip", "HTTPS")
+Rel(agg, redis, "Cache-aside", "TCP")
 
 Lay_D(web, gateway)
 Lay_D(gateway, agg)
-Lay_R(cache, download)
-Lay_R(download, thumbs)
-Lay_D(agg, cache)
+Lay_D(agg, redis)
 Lay_R(auth, upload)
 Lay_R(upload, procApi)
-Lay_D(cache, redis)
+Lay_D(agg, auth)
 
 @enduml

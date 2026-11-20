@@ -7,28 +7,25 @@ LAYOUT_TOP_DOWN()
 title Processamento — Consulta de progresso
 
 Container(bff, "BFF Consultas", ".NET", "Consulta progresso com cache-aside")
+Container(upload, "Upload", ".NET", "Thumb de catálogo no storage quente")
 ContainerDb(redis, "Redis BFF", "Redis", "Cache-aside de progresso")
 ContainerDb(pgProc, "Postgres Processamento", "PostgreSQL", "Progresso canônico")
-ContainerDb(quente, "Storage quente", "Object storage", "Thumbs")
 
 Container_Boundary(procApi, "Processamento API") {
   Component(apiHttp, "API HTTP", ".NET", "Status e progresso")
   Component(consulta, "Consulta progresso", ".NET", "Lê progresso canônico")
-  Component(thumbs, "Thumbs", ".NET", "Resolve URL da thumb no quente")
 }
 
 Rel(bff, redis, "Cache-aside", "TCP")
-Rel(bff, apiHttp, "Consulta progresso / thumb", "HTTPS")
+Rel(bff, apiHttp, "Consulta progresso", "HTTPS")
 Rel(apiHttp, consulta, "Usa")
 Rel(consulta, pgProc, "Lê", "SQL")
-Rel(apiHttp, thumbs, "Usa")
-Rel(thumbs, quente, "URL thumb", "HTTPS")
+Rel(bff, upload, "URL da thumb", "HTTPS")
 
 Lay_D(bff, redis)
 Lay_R(bff, apiHttp)
 Lay_D(apiHttp, consulta)
-Lay_R(consulta, thumbs)
 Lay_D(consulta, pgProc)
-Lay_D(thumbs, quente)
+Lay_R(apiHttp, upload)
 
 @enduml
